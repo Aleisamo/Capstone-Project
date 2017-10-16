@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ChildAdventure</string>
+    <string name="nounou">Childminder Dashboard</string>
+    <string name="take_photo">Take photo</string>
+    <string name="week">Week info</string>
+    <string name="profiles">Profiles</string>
+    <string name="gallery">Gallery</string>
+    <string name="signout">signout</string>
+</resources>
