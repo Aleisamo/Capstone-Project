@@ -38,6 +38,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,14 +46,31 @@ import butterknife.ButterKnife;
 public class TakePhoto extends AppCompatActivity {
 
     private static final int REQUEST_CAMERA_PERMISSION = 1 ;
+    public static final  String CAMERA_BACK = "0";
+    public static final  String CAMERA_FRONT = "1";
     private Size previewSize;
     private Size jpegSizes[]=null;
     private CameraDevice cameraDevice;
     private CaptureRequest.Builder buildPreview;
     private CameraCaptureSession previewSession;
+    private File file;
+    private HandlerThread backgroundThread;
+    private Handler backgroundHandler;
+    private String cameraId = CAMERA_BACK;
+    private ImageReader imageReader;
+    private Semaphore cameraOpenClose = new Semaphore(1);
+    // Use texttureView for preview
+    @BindView (R.id.camera_preview)
+    TextureView preview;
+
+    @BindView(R.id.camera)
+    Button openCamera;
+    @BindView(R.id.switch_camera)
+    Button switchCamera;
 
     private static final SparseIntArray ORIENTATIONS =
             new SparseIntArray();
+
     static {
         ORIENTATIONS.append(Surface.ROTATION_0,90);
         ORIENTATIONS.append(Surface.ROTATION_90,0);
@@ -60,32 +78,43 @@ public class TakePhoto extends AppCompatActivity {
         ORIENTATIONS.append(Surface.ROTATION_270,180);
     }
 
-    @BindView (R.id.camera_preview)
-    TextureView preview;
-    @BindView(R.id.camera)
-    Button openCamera;
-    private File file;
-    private HandlerThread backgroundThread;
-    private Handler backgroundHandler;
-    private String cameraId;
-    private ImageReader imageReader;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_photo);
         ButterKnife.bind(this);
+
         openCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getPhoto();
             }
+
+        });
+        switchCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchCamera();
+            }
         });
 
     }
 
-    TextureView.SurfaceTextureListener textureListener =
+    private void switchCamera() {
+        if (cameraId.equals(CAMERA_BACK)){
+            cameraId = CAMERA_FRONT;
+              }
+        else {
+            cameraId = CAMERA_BACK;
+
+        }
+        closeCamera();
+        openDevice();
+    }
+
+
+    TextureView.SurfaceTextureListener mTextureListener =
             new TextureView.SurfaceTextureListener() {
                 @Override
                 public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -108,26 +137,34 @@ public class TakePhoto extends AppCompatActivity {
                 }
             };
 
+            // call when cameraDevice change its state
+
             private final CameraDevice.StateCallback stateCallback =
                     new CameraDevice.StateCallback() {
                         @Override
                         public void onOpened(CameraDevice camera) {
+                            cameraOpenClose.release();
                             cameraDevice = camera;
-                            createPreview();
+                            createPreviewSession();
                         }
 
                         @Override
                         public void onDisconnected(CameraDevice camera) {
+                            cameraOpenClose.release();
                             cameraDevice.close();
+                            cameraDevice = null;
 
                         }
 
                         @Override
                         public void onError(CameraDevice camera, int error){
+                            cameraOpenClose.release();
                             cameraDevice.close();
                             cameraDevice = null;
                         }
                     };
+
+                    // handles events related with JPEG Capture
 
                     final  CameraCaptureSession.CaptureCallback captureCallbackListener =
                             new CameraCaptureSession.CaptureCallback(){
@@ -137,14 +174,18 @@ public class TakePhoto extends AppCompatActivity {
                                                                TotalCaptureResult result) 
                                 {
                                     super.onCaptureCompleted(session, request, result);
-                                    createPreview();
+                                    createPreviewSession();
                                 }
                             };
+
+                            // start background thread
                             protected void thread() {
                                 backgroundThread = new HandlerThread("camera Background");
                                 backgroundThread.start();
                                 backgroundHandler = new Handler(backgroundThread.getLooper());
                             }
+
+                            // stop background thread
                             protected void stopThread(){
                                 backgroundThread.quitSafely();
                                 try {
@@ -156,14 +197,6 @@ public class TakePhoto extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
-
-
-
-
-
-
-
-
 
 
     public void getPhoto() {
@@ -242,7 +275,7 @@ public class TakePhoto extends AppCompatActivity {
                                                        TotalCaptureResult result)
                         {
                             super.onCaptureCompleted(session, request, result);
-                            createPreview();
+                            createPreviewSession();
                         }
                     };
 
@@ -269,14 +302,19 @@ public class TakePhoto extends AppCompatActivity {
 
     }
 
-    protected void createPreview() {
+    protected void createPreviewSession() {
         try {
             SurfaceTexture surfaceTexture = preview.getSurfaceTexture();
             assert surfaceTexture != null;
+            // set up size as camera preview
             surfaceTexture.setDefaultBufferSize(previewSize.getWidth(), previewSize.getHeight());
+            //output surface
             Surface surface = new Surface(surfaceTexture);
+            // set up buildPreview with output surface
             buildPreview = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             buildPreview.addTarget(surface);
+
+            // create  captureSession for camera preview
             cameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback(){
                 @Override
                 public void onConfigured(CameraCaptureSession cameraCaptureSession) {
@@ -298,19 +336,38 @@ public class TakePhoto extends AppCompatActivity {
         }
     }
     private void openDevice() {
+
+        // Add permission for camera and let user grant it.
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) !=
+                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CAMERA_PERMISSION);
+            return;
+        }
+
+        //use to iterate all the cameras available in the system using a camera id
+
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         try {
             cameraId = manager.getCameraIdList()[0];
+
+            // list  for all output formats that are supported by camera device
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
-            StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-            assert map != null;
-            previewSize = map.getOutputSizes(SurfaceTexture.class)[0];
-            // Add permission for camera and let user grant the permission
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CAMERA_PERMISSION);
-                return;
+            StreamConfigurationMap FrontConfigMap = characteristics.get(
+                    CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            StreamConfigurationMap backConfigMap = characteristics.get(
+                    CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            if ( cameraId == CAMERA_BACK && FrontConfigMap != null) {
+                previewSize = backConfigMap.getOutputSizes(SurfaceTexture.class)[0];
+                manager.openCamera(cameraId, stateCallback, null);
             }
-            manager.openCamera(cameraId, stateCallback, null);
+            else{
+                previewSize = FrontConfigMap.getOutputSizes(SurfaceTexture.class)[0];
+                manager.openCamera(cameraId,stateCallback,null);
+
+            }
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -356,12 +413,12 @@ public class TakePhoto extends AppCompatActivity {
         if (preview.isAvailable()) {
             openDevice();
         } else {
-            preview.setSurfaceTextureListener(textureListener);
+            preview.setSurfaceTextureListener(mTextureListener);
         }
     }
     @Override
     protected void onPause() {
-        //closeCamera();
+        closeCamera();
         stopThread();
         super.onPause();
     }

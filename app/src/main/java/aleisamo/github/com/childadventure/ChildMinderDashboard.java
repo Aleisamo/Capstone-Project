@@ -31,8 +31,8 @@ public class ChildMinderDashboard extends AppCompatActivity {
                 startActivity(intentPhoto);
                 break;
             case R.id.week_info:
-                //Intent intentPhoto = new Intent(this, TakePhoto.class);
-                //startActivity(intentPhoto);
+                Intent intentWeekInfo = new Intent(this, WeekInfo.class);
+                startActivity(intentWeekInfo);
                 break;
             case R.id.profiles:
                // Intent intentPhoto = new Intent(this, TakePhoto.class);
