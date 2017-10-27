@@ -29,12 +29,23 @@
             </intent-filter>
         </activity>
         <activity android:name=".TakePhoto" />
-        <activity android:name=".WeeklyMenu" />
         <activity
             android:name=".WeekInfo"
+            android:launchMode="standard"
             android:label="@string/title_activity_week_info"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".ChildMinderDashboard">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ChildMinderDashboard"/>
         </activity>
+        <activity android:name=".WeeklyMenu"
+            android:label="@string/weekly_menu"
+            android:parentActivityName=".WeekInfo">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".WeekInfo"/>
+            </activity>
+
     </application>
 
 </manifest>
