@@ -12,7 +12,7 @@
         android:elevation="2dp">
 
         <TextView
-            android:id="@+id/textView"
+            android:name="@+name/textView"
             android:layout_width="79dp"
             android:layout_height="79dp"
             android:layout_gravity="center"
@@ -69,6 +69,7 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/edit_menu"
+            android:name="@+name/edit_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -78,6 +79,7 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/save_menu"
+            android:name="@+name/save_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

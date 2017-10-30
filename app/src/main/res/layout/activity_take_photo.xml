@@ -7,11 +7,13 @@
 
     <TextureView
         android:id="@+id/camera_preview"
+        android:name="@+name/camera_preview"
         android:layout_width="match_parent"
         android:layout_height="374dp" />
 
     <Button
         android:id="@+id/camera"
+        android:name="@+name/camera"
         android:layout_width="wrap_content"
         android:text="click"
         android:gravity="center_horizontal"
@@ -19,6 +21,7 @@
         android:layout_alignBottom="@+id/camera_preview" />
     <Button
         android:id="@+id/switch_camera"
+        android:name="@+name/switch_camera"
         android:layout_width="wrap_content"
         android:text="switch"
         android:layout_height="35dp"

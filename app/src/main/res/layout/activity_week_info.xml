@@ -8,6 +8,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_edit"
+        android:name="@+name/fab_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|left"
@@ -16,12 +17,15 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_save"
+        android:name="@+name/fab_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="@dimen/fab_margin"/>
+
     <FrameLayout
         android:id="@+id/week_activity_fragment"
+        android:name="@+name/week_activity_fragment"
         android:layout_width="match_parent"
         android:layout_height="430dp"
         android:layout_marginTop="60dp">
@@ -50,6 +54,7 @@
 
             <TextView
                 android:id="@+id/monday"
+                android:name="@+name/monday"
                 android:layout_width="56dp"
                 android:layout_marginLeft="20dp"
                 android:paddingTop="16dp"
@@ -63,6 +68,7 @@
 
             <TextView
                 android:id="@+id/tuesday"
+                android:name="@+name/tuesday"
                 android:layout_width="56dp"
                 android:layout_margin="16dp"
                 android:paddingTop="16dp"
@@ -76,6 +82,7 @@
 
             <TextView
                 android:id="@+id/wednesday"
+                android:name="@+name/wednesday"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -88,6 +95,7 @@
 
             <TextView
                 android:id="@+id/thursday"
+                android:name="@+name/thursday"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -101,6 +109,7 @@
 
             <TextView
                 android:id="@+id/friday"
+                android:name="@+name/friday"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_marginLeft="16dp"

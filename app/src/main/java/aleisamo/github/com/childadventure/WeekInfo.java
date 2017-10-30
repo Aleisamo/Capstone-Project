@@ -49,6 +49,7 @@ public class WeekInfo extends AppCompatActivity {
             createFragmentActivities();
         }
         mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mReferenceDay = mFirebaseDatabase.getReference().child("days");
     }
 
     // listener for save and edit week info
@@ -64,27 +65,35 @@ public class WeekInfo extends AppCompatActivity {
     @OnClick({R.id.monday, R.id.tuesday, R.id.wednesday, R.id.thursday, R.id.friday})
     public void day(TextView day) {
         final String nameDay = nameDay(day);
-        mReferenceDay = mFirebaseDatabase.getReference().child(nameDay);
-
         mReferenceDay.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.hasChildren()) {
-                            DataSnapshot firstChild = dataSnapshot.getChildren().iterator().next();
-                            Day newDay = firstChild.getValue(Day.class);
-                            String key = newDay.getKey();
-                            String name = newDay.getDayName();
-                            checkDay(name, key);
-                        } else {
-                            newDailyMenu(nameDay);
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChildren()) {
+                    DataSnapshot existingDaySnapshot = null;
+                    for (DataSnapshot daySnapshot : dataSnapshot.getChildren()) {
+                        Day day = daySnapshot.getValue(Day.class);
+                        if (nameDay.equals(day.getName())) {
+                            existingDaySnapshot = daySnapshot;
+                            break;
                         }
                     }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
+                    if (existingDaySnapshot == null) {
+                        newDailyMenu(nameDay);
+                    } else {
+                        Day newDay = existingDaySnapshot.getValue(Day.class);
+                        String name = newDay.getName();
+                        checkDay(name, newDay.getChildKey());
                     }
-                });
+                } else {
+                    newDailyMenu(nameDay);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     // create new day on database and save key
@@ -107,42 +116,33 @@ public class WeekInfo extends AppCompatActivity {
         }
     }
 
-    public void checkDay(final String nameDay, String key) {
+    public void checkDay(String nameDay, String id) {
         Intent readMenu = new Intent(this, WeeklyMenu.class);
         readMenu.putExtra("day", nameDay);
-        readMenu.putExtra("key", key);
+        readMenu.putExtra("id", id);
         startActivity(readMenu);
     }
 
     public void newDailyMenu(String nameDay) {
         String id = mReferenceDay.push().getKey();
-        Day newDay = new Day(id, nameDay);
+        String breakfast = "empty";
+        String snacks = "empty";
+        String lunch = "empty";
+        String dinner = "empty";
+        Menu dailyMenu = new Menu(breakfast, snacks, lunch, dinner);
+        Day newDay = new Day(nameDay, dailyMenu, id);
         mReferenceDay.child(id).setValue(newDay);
         // Intent open weekly menu pass id from day object and day name
         Intent openNewDailyMenu = new Intent(this, WeeklyMenu.class);
         openNewDailyMenu.putExtra("day", nameDay);
         openNewDailyMenu.putExtra("id", id);
         startActivity(openNewDailyMenu);
-
-        //mReferenceDay.removeEventListener(mChildEventListener);
     }
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
     }
-    /*private void createFragmentMenu(){
-        // create widget_list_ingredients card fragment
-        WeeklyMenu weeklyMenuFragment = new WeeklyMenu();
-
-        // add fragment to the activity using Fragment manager
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        // transaction
-        fragmentManager.beginTransaction()
-                .replace(R.id.week_fragment,weeklyMenuFragment)
-                .commit();
-    }*/
 
     private void createFragmentActivities() {
         // create widget_list_ingredients card fragment

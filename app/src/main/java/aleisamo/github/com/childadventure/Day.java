@@ -2,32 +2,42 @@ package aleisamo.github.com.childadventure;
 
 public class Day {
 
-    private String id;
-    private String dayName;
+    private String name;
+    private String childKey;
+
+    private Menu menu;
+    //private Map<String,Menu>nameDay;
 
     public Day(){
     }
 
-    public Day(String id, String nameDay) {
-        this.id = id;
-        this.dayName = nameDay;
+    public Day (String name, Menu menu,String childKey){
+        this.menu = menu;
+        this.name = name;
+        this.childKey = childKey;
     }
 
-    public String getDayName() {
-        return dayName;
+    public String getChildKey() {
+        return childKey;
     }
 
-    public void setDayName(String dayName) {
-        this.dayName = dayName;
+    public void setChildKey(String childKey) {
+        this.childKey = childKey;
     }
 
-    public String getKey() {
-        return id;
+    public Menu getMenu() {
+        return menu;
     }
 
-    public void setKey(String key) {
-        this.id = key;
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+    public String getName() {
+        return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
 }

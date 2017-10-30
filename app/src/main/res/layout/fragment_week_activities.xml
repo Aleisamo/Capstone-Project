@@ -18,7 +18,7 @@
         android:layout_height="50dp"
         app:cardCornerRadius="5dp">
         <EditText
-            android:id="@+id/week_activity"
+            android:name="@+name/week_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/monday_i"/>
             <EditText
-                android:id="@+id/day_activity"
+                android:name="@+name/day_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/tuesday_i"/>
             <EditText
-                android:id="@+id/tuesday_activity"
+                android:name="@+name/tuesday_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/wednesday_i"/>
             <EditText
-                android:id="@+id/wednesday_activity"
+                android:name="@+name/wednesday_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/thursday_i"/>
             <EditText
-                android:id="@+id/thursday_activity"
+                android:name="@+name/thursday_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/friday_i"/>
             <EditText
-                android:id="@+id/friday_activity"
+                android:name="@+name/friday_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
