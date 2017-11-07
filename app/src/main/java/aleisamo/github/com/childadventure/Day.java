@@ -6,8 +6,6 @@ public class Day {
     private String childKey;
 
     private Menu menu;
-    //private Map<String,Menu>nameDay;
-
     public Day(){
     }
 

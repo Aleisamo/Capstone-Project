@@ -28,4 +28,6 @@
     <string name="wednesday_i">Wednesday</string>
     <string name="tuesday_i">Tuesday</string>
     <string name="weekly_menu">Menu</string>
+    <string name="child_name">Child name here</string>
+    <string name="child_age">Child age here</string>
 </resources>

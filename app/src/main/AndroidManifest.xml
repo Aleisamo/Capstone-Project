@@ -31,20 +31,23 @@
         <activity android:name=".TakePhoto" />
         <activity
             android:name=".WeekInfo"
-            android:launchMode="standard"
             android:label="@string/title_activity_week_info"
+            android:launchMode="standard"
             android:parentActivityName=".ChildMinderDashboard">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ChildMinderDashboard"/>
+                android:value=".ChildMinderDashboard" />
         </activity>
-        <activity android:name=".WeeklyMenu"
+        <activity
+            android:name=".WeeklyMenu"
             android:label="@string/weekly_menu"
             android:parentActivityName=".WeekInfo">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".WeekInfo"/>
-            </activity>
+                android:value=".WeekInfo" />
+        </activity>
+        <activity android:name=".Child_Profile"
+            android:label="@string/profiles"/>
 
     </application>
 
