@@ -9,7 +9,9 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class Child_View_Holder extends RecyclerView.ViewHolder {
+public class ChildViewHolder extends RecyclerView.ViewHolder {
+    View mView;
+
     @BindView(R.id.child_cardView)
     CardView mCardView;
     @BindView(R.id.child_name)
@@ -23,13 +25,15 @@ public class Child_View_Holder extends RecyclerView.ViewHolder {
     //private final List<Child> children;
 
 
-    public Child_View_Holder(View itemView) {
+    public ChildViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        mView = itemView;
         //this.clickListener = clickListener;
         //this.children = children;
         //itemView.setOnClickListener(this);
     }
+
 
 
 }

@@ -62,7 +62,7 @@ public class WeeklyMenu extends AppCompatActivity {
         Menu dailyMenu = new Menu(breakfast, snacks, lunch, dinner);
         mMenuReference.setValue(dailyMenu);
         Log.v(TAG, "getMenu: " + id);
-        Toast.makeText(this, name + "\n" + "menu save", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, name + "\n" + "select_menu save", Toast.LENGTH_SHORT).show();
         goBack();
     }
 

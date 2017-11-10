@@ -132,7 +132,7 @@ public class WeekInfo extends AppCompatActivity {
         Menu dailyMenu = new Menu(breakfast, snacks, lunch, dinner);
         Day newDay = new Day(nameDay, dailyMenu, id);
         mReferenceDay.child(id).setValue(newDay);
-        // Intent open weekly menu pass id from day object and day name
+        // Intent open weekly select_menu pass id from day object and day name
         Intent openNewDailyMenu = new Intent(this, WeeklyMenu.class);
         openNewDailyMenu.putExtra("day", nameDay);
         openNewDailyMenu.putExtra("id", id);

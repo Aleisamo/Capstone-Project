@@ -30,4 +30,13 @@
     <string name="weekly_menu">Menu</string>
     <string name="child_name">Child name here</string>
     <string name="child_age">Child age here</string>
+    <string name="dob">date of birth</string>
+    <string name="family_member">Family member</string>
+    <string name="address">Child address</string>
+    <string name="languages">languages</string>
+    <string name="allergies"> Allergies</string>
+    <string name="relevant_info"> Relevant information</string>
+    <string name="email">Email</string>
+    <string name="child_details">Child Details</string>
+    <string name="phone">Phone number</string>
 </resources>

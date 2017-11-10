@@ -35,7 +35,7 @@ public class ChildMinderDashboard extends AppCompatActivity {
                 startActivity(intentWeekInfo);
                 break;
             case R.id.profiles:
-               Intent intentChildProfile = new Intent(this, Child_Profile.class);
+               Intent intentChildProfile = new Intent(this, ChildProfile.class);
                startActivity(intentChildProfile);
                 break;
             case R.id.gallery:

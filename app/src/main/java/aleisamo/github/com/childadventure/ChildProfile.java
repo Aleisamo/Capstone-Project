@@ -17,7 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class Child_Profile extends AppCompatActivity {
+public class ChildProfile extends AppCompatActivity {
 
     @BindView(R.id.add_profile)
     FloatingActionButton mAddChild;
@@ -30,33 +30,30 @@ public class Child_Profile extends AppCompatActivity {
     DatabaseReference mReferenceChild;
 
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_profile);
         ButterKnife.bind(this);
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) {
             createFragmentActivities();
         }
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mReferenceChild = mFirebaseDatabase.getReference().child("child");
     }
 
-    @OnClick (R.id.add_profile)
-    public void openDialog(){
+    @OnClick(R.id.add_profile)
+    public void openDialog() {
         addChildToList();
     }
 
     // create a dialog to enter child's name and age
-    public void addChildToList(){
+    public void addChildToList() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
-        final View dialogAddChild = inflater.inflate(R.layout.dialog_add_child,null);
-        final EditText mWriteChildName =  (EditText) dialogAddChild.findViewById(R.id.write_child_name);
-        final EditText mWriteChildAge =  (EditText) dialogAddChild.findViewById(R.id.write_child_age);
+        final View dialogAddChild = inflater.inflate(R.layout.dialog_add_child, null);
+        final EditText mWriteChildName = (EditText) dialogAddChild.findViewById(R.id.write_child_name);
+        final EditText mWriteChildAge = (EditText) dialogAddChild.findViewById(R.id.write_child_age);
 
         dialogBuilder.setView(dialogAddChild);
 
@@ -68,7 +65,7 @@ public class Child_Profile extends AppCompatActivity {
                 //send data to
                 childName = mWriteChildName.getText().toString();
                 childAge = mWriteChildAge.getText().toString();
-                writeChildProfile(childName,childAge);
+                writeChildProfile(childName, childAge);
 
             }
         });
@@ -84,13 +81,10 @@ public class Child_Profile extends AppCompatActivity {
 
     // Method write firebase child profile
 
-    public void writeChildProfile (String childName, String childAge){
+    public void writeChildProfile(String childName, String childAge) {
         String id = mReferenceChild.push().getKey();
-        String picture_path ="";
-        ChildDetails childDetails = new ChildDetails(childName,
-                childAge,
-                "",
-                "",
+        String picture_path = "";
+        FamilyMember familyMember = new FamilyMember("",
                 "",
                 "",
                 "",
@@ -98,27 +92,33 @@ public class Child_Profile extends AppCompatActivity {
                 "",
                 "",
                 "");
-        Child child = new Child(childName,childAge,picture_path,childDetails);
+        ChildDetails childDetails = new ChildDetails(childName,
+                childAge,
+                "",
+                "",
+                familyMember,
+                "",
+                "",
+                "",
+                "");
+        Child child = new Child(childName, childAge, picture_path, childDetails);
         mReferenceChild.child(id).setValue(child);
-
-
     }
 
     // create Fragment
     private void createFragmentActivities() {
         // create widget_list_ingredients card fragment
-        Child_Profile_Fragment childProfileFragment  = new Child_Profile_Fragment();
+        ChildProfileFragment childProfileFragment = new ChildProfileFragment();
 
         // add fragment to the activity using Fragment manager
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // transaction
         fragmentManager.beginTransaction()
-                .replace(R.id.profile_fragment,childProfileFragment)
+                .replace(R.id.profile_fragment, childProfileFragment)
                 .commit();
 
     }
-
 
 
 }

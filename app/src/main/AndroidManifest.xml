@@ -46,8 +46,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".WeekInfo" />
         </activity>
-        <activity android:name=".Child_Profile"
-            android:label="@string/profiles"/>
+        <activity android:name=".ChildProfile"
+            android:label="@string/profiles"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ChildMinderDashboard"/>
+        </activity>
+        <activity android:name=".ChildProfileDetails"
+            android:label="@string/child_details"
+            android:parentActivityName=".ChildProfile">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ChildProfile"/>
+        </activity>
 
     </application>
 

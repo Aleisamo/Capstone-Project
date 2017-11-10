@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class Child_Adapter extends RecyclerView.Adapter<Child_View_Holder> {
+public class Child_Adapter extends RecyclerView.Adapter<ChildViewHolder> {
 
     private final List<Child> children;
     private OnItemClickListener clickListener;
@@ -23,14 +23,14 @@ public class Child_Adapter extends RecyclerView.Adapter<Child_View_Holder> {
     }
 
     @Override
-    public Child_View_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ChildViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.child, parent, false);
-        return new Child_View_Holder(v);
+        return new ChildViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(Child_View_Holder holder, int position) {
+    public void onBindViewHolder(ChildViewHolder holder, int position) {
 
         // implement read function firebase
 
@@ -44,7 +44,7 @@ public class Child_Adapter extends RecyclerView.Adapter<Child_View_Holder> {
 
     }
 
-    public void hasPhotoProfile(int position, Child_View_Holder child_view_holder, Context context) {
+    public void hasPhotoProfile(int position, ChildViewHolder child_view_holder, Context context) {
         String imageUrl = children.get(position).getPictureUrl();
         if (imageUrl.isEmpty()) {
             child_view_holder.mChildPhoto.setImageResource(R.mipmap.ic_profile);
