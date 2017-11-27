@@ -9,24 +9,25 @@
         android:id="@+id/camera_preview"
         android:name="@+name/camera_preview"
         android:layout_width="match_parent"
-        android:layout_height="374dp" />
+        android:layout_height="match_parent" />
 
     <Button
         android:id="@+id/camera"
         android:name="@+name/camera"
-        android:layout_width="wrap_content"
-        android:text="click"
-        android:gravity="center_horizontal"
-        android:layout_height="35dp"
-        android:layout_alignBottom="@+id/camera_preview" />
-    <Button
-        android:id="@+id/switch_camera"
-        android:name="@+name/switch_camera"
-        android:layout_width="wrap_content"
-        android:text="switch"
-        android:layout_height="35dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignBottom="@+id/camera_preview"
-        android:layout_alignRight="@+id/camera_preview"
-        />
+        android:layout_centerHorizontal="true"
+        android:background="@android:drawable/radiobutton_off_background"
+        android:gravity="center_horizontal" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/childList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/camera_preview"
+        android:visibility="invisible">
+    </android.support.v7.widget.RecyclerView>
+
 
 </RelativeLayout>

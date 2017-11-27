@@ -12,16 +12,13 @@ import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.TotalCaptureResult;
-import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
@@ -65,8 +62,8 @@ public class TakePhoto extends AppCompatActivity {
 
     @BindView(R.id.camera)
     Button openCamera;
-    @BindView(R.id.switch_camera)
-    Button switchCamera;
+   // @BindView(R.id.switch_camera)
+    //Button switchCamera;
 
     private static final SparseIntArray ORIENTATIONS =
             new SparseIntArray();
@@ -92,16 +89,16 @@ public class TakePhoto extends AppCompatActivity {
             }
 
         });
-        switchCamera.setOnClickListener(new View.OnClickListener() {
+       /* switchCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switchCamera();
             }
-        });
+        });*/
 
     }
 
-    private void switchCamera() {
+   /* private void switchCamera() {
         if (cameraId.equals(CAMERA_BACK)){
             cameraId = CAMERA_FRONT;
               }
@@ -111,14 +108,14 @@ public class TakePhoto extends AppCompatActivity {
         }
         closeCamera();
         openDevice();
-    }
+    }*/
 
 
     TextureView.SurfaceTextureListener mTextureListener =
             new TextureView.SurfaceTextureListener() {
                 @Override
                 public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                    openDevice();
+                    //openDevice();
                 }
 
                 @Override
@@ -335,7 +332,7 @@ public class TakePhoto extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    private void openDevice() {
+   /* private void openDevice() {
 
         // Add permission for camera and let user grant it.
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) !=
@@ -372,7 +369,7 @@ public class TakePhoto extends AppCompatActivity {
             e.printStackTrace();
         }
         Log.e(getClass().getSimpleName(), "openCamera X");
-    }
+    }*/
 
 
     protected void updatePreview() {
@@ -411,7 +408,7 @@ public class TakePhoto extends AppCompatActivity {
         super.onResume();
         thread();
         if (preview.isAvailable()) {
-            openDevice();
+            //openDevice();
         } else {
             preview.setSurfaceTextureListener(mTextureListener);
         }

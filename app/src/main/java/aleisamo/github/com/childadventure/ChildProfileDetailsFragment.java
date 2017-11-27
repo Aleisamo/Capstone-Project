@@ -92,14 +92,14 @@ public class ChildProfileDetailsFragment extends Fragment {
                     mChildAge.setText(childDetails.getAge());
                     mDOB.setText(childDetails.getDob());
                     mChildAddresse.setText(childDetails.getAddress());
-                   /* mFamilyMember1.setText(childDetails.getFamilyMember().getMemberName1());
+                    mFamilyMember1.setText(childDetails.getFamilyMember().getMemberName1());
                     mAddress1.setText(childDetails.getFamilyMember().getAddress1());
                     mEmail1.setText(childDetails.getFamilyMember().getEmail1());
                     mPhone1.setText(childDetails.getFamilyMember().getPhoneNumber1());
                     mFamilyMember2.setText(childDetails.getFamilyMember().getMemberName2());
                     mAddress2.setText(childDetails.getFamilyMember().getAddress2());
                     mEmail2.setText(childDetails.getFamilyMember().getEmail2());
-                    mPhone2.setText(childDetails.getFamilyMember().getPhoneNumber2());*/
+                    mPhone2.setText(childDetails.getFamilyMember().getPhoneNumber2());
                     mAllergies.setText(childDetails.getAllergies());
                     mLanguage.setText(childDetails.getLanguages());
                     mRelevantInfo.setText(childDetails.getRelevantInformation());
@@ -114,6 +114,8 @@ public class ChildProfileDetailsFragment extends Fragment {
 
 
     }
+
+
 
    /* @OnClick(R.id.dob)
     public void pick() {
