@@ -72,7 +72,7 @@ public class ChildProfileFragment extends Fragment {
                         .setQuery(databaseChildReference, Child.class)
                         .build();
         mChildAdapter = new FirebaseRecyclerAdapter<Child, ChildViewHolder>(options) {
-            public DatabaseReference getChildRef;
+            private DatabaseReference getChildRef;
 
             @Override
             public ChildViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

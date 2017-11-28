@@ -25,6 +25,7 @@ public class ChildProfile extends AppCompatActivity {
     FloatingActionButton mDeleteProfile;
     private String childName;
     private String childAge;
+    private final String FILL = "FILL";
     // firebase entry
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mReferenceChild;

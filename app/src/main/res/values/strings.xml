@@ -41,7 +41,6 @@
     <string name="phone">Phone number</string>
     <string name="denied">Permission denied</string>
     <string name="saved_message">Image Saved at %1$s</string>
-    <!-- key words -->
     <string name="path">picture_path</string>
     <string name="permission_denied">permission denied</string>
 

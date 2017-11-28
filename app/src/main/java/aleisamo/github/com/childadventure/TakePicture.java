@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -20,7 +23,9 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +33,8 @@ import butterknife.OnClick;
 
 public class TakePicture extends AppCompatActivity {
 
+    @BindView(R.id.share_list_fragment)
+    FrameLayout mShareList;
     @BindView(R.id.camera_preview)
     ImageView mImagePreview;
     @BindView(R.id.clear)
@@ -36,6 +43,10 @@ public class TakePicture extends AppCompatActivity {
     FloatingActionButton mSavePicture;
     @BindView(R.id.share)
     FloatingActionButton mSharePicture;
+    @BindView(R.id.insert_comment)
+    FloatingActionButton mInsertComment;
+
+
     Bitmap mBitmap;
     private String mPath;
     Uri pictureUri;
@@ -49,6 +60,10 @@ public class TakePicture extends AppCompatActivity {
         setContentView(R.layout.activity_take_picture);
         ButterKnife.bind(this);
         setImagePreview();
+        if (savedInstanceState == null){
+            createFragmentActivities();
+        }
+
         // access to firebase storage
         mFirebaseStorage = FirebaseStorage.getInstance();
 
@@ -79,20 +94,19 @@ public class TakePicture extends AppCompatActivity {
         String imageName = pictureUri.getLastPathSegment();
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        byte[] data = byteArrayOutputStream.toByteArray();
-
+        mBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+        InputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading");
         progressDialog.show();
         StorageReference storageReference = mStorageRef.child("image/"+imageName);
-        storageReference.putBytes(data)
+        storageReference.putStream(inputStream)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         progressDialog.dismiss();
                         Log.v("url",taskSnapshot.getDownloadUrl().toString());
-                        Toast.makeText(getApplicationContext(), "Picture uploaded",
+                        Toast.makeText(getApplicationContext(), "Picture uploaded to ChildMinder gallery",
                                 Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -117,11 +131,38 @@ public class TakePicture extends AppCompatActivity {
 
     @OnClick(R.id.share)
     public void assignPic(){
-        Uri assignedPicture = Uri.parse(mPath);
+        mShareList.setVisibility(View.VISIBLE);
+        // get intent if intent is !null then setVisibility
+        mSavePicture.setVisibility(View.GONE);
+        mSharePicture.setVisibility(View.GONE);
+        mInsertComment.setVisibility(View.GONE);
+       // Uri assignedPicture = Uri.parse(mPath);
+    }
+
+    @OnClick(R.id.insert_comment)
+    public void insertComment (){
+        Toast.makeText(this, "write a short description", Toast.LENGTH_SHORT).show();
+    }
 
 
+
+    // create Fragment
+    private void createFragmentActivities() {
+        // create widget_list_ingredients card fragment
+        ShareListFragment shareListFragment = new ShareListFragment();
+
+        // add fragment to the activity using Fragment manager
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // transaction
+        fragmentManager.beginTransaction()
+                .replace(R.id.share_list_fragment,shareListFragment)
+                .commit();
 
     }
+
+
+
 
 
 }
