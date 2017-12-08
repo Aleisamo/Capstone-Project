@@ -43,5 +43,8 @@
     <string name="saved_message">Image Saved at %1$s</string>
     <string name="path">picture_path</string>
     <string name="permission_denied">permission denied</string>
+    <string name="add">Add description</string>
+    <string name="childminderFolder">childminderPictures</string>
+    <string name="childFolder">childFolder</string>
 
 </resources>

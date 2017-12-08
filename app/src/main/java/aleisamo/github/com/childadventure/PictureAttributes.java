@@ -56,6 +56,7 @@ class PictureAttributes {
         int outWidth = bmOptions.outWidth;
         int outHeight = bmOptions.outHeight;
 
+
         // Determine min scale factor
         int scaleFactor = Math.min(outWidth / widthPixels, outHeight / heightPixels);
 

@@ -1,38 +1,41 @@
 package aleisamo.github.com.childadventure;
 
-import android.app.ProgressDialog;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.File;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+// TODO check lifecycle to restore activity when is on background
+
 public class TakePicture extends AppCompatActivity {
 
+    private static final String PREFERENCE = "preference";
+    private static final String FILE_PROVIDER_AUTHORITY = "aleisamo.github.com.fileprovider";
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     @BindView(R.id.share_list_fragment)
     FrameLayout mShareList;
     @BindView(R.id.camera_preview)
@@ -45,124 +48,172 @@ public class TakePicture extends AppCompatActivity {
     FloatingActionButton mSharePicture;
     @BindView(R.id.insert_comment)
     FloatingActionButton mInsertComment;
+    @BindView(R.id.check)
+    FloatingActionButton mKeepComment;
+    @BindView(R.id.photo_description)
+    EditText mPhotoDescription;
 
 
-    Bitmap mBitmap;
-    private String mPath;
-    Uri pictureUri;
-    FirebaseStorage mFirebaseStorage;
-    StorageReference mStorageRef, mPictureRef;
-    UploadTask uploadTask;
+    private String photoDescription;
+    private String mTempPath;
+    private SharedPreferences.Editor pictureName;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_picture);
         ButterKnife.bind(this);
-        setImagePreview();
-        if (savedInstanceState == null){
-            createFragmentActivities();
+        Intent photoPath = getIntent();
+        if (photoPath != null) {
+            setImagePreview(photoPath.getStringExtra(String.valueOf(R.string.path)));
         }
-
-        // access to firebase storage
-        mFirebaseStorage = FirebaseStorage.getInstance();
-
-        // create storage ref
-        mStorageRef = mFirebaseStorage.getReference();
-
+       /* if (savedInstanceState == null) {
+            createFragmentActivities();
+        }*/
     }
 
-
-    public void setImagePreview() {
-        Intent photoPath = getIntent();
-        mPath = photoPath.getStringExtra(String.valueOf(R.string.path));
-        mBitmap = PictureAttributes.resamplePicture(this, mPath);
+    public void setImagePreview(String mPath) {
+        Bitmap mBitmap = PictureAttributes.resamplePicture(this, mPath);
         mImagePreview.setImageBitmap(mBitmap);
+    }
+
+    public void savePath(String mPath) {
+        pictureName =
+                getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE).edit();
+        pictureName.putString("getPath", mPath);
+        pictureName.apply();
     }
 
     @OnClick(R.id.clear)
     public void clearPicture() {
-        mImagePreview.setImageResource(0);
-        PictureAttributes.deletePictureFile(this, mPath);
-        Intent go_back = new Intent(this, ChildMinderDashboard.class);
-        startActivity(go_back);
+        launchCamera();
     }
 
     @OnClick(R.id.save)
-    public void savePicture() {
-        pictureUri = Uri.parse(mPath);
-        String imageName = pictureUri.getLastPathSegment();
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        mBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
-        InputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Uploading");
-        progressDialog.show();
-        StorageReference storageReference = mStorageRef.child("image/"+imageName);
-        storageReference.putStream(inputStream)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        progressDialog.dismiss();
-                        Log.v("url",taskSnapshot.getDownloadUrl().toString());
-                        Toast.makeText(getApplicationContext(), "Picture uploaded to ChildMinder gallery",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), "Error uploading picture",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                        progressDialog.setMessage("Uploaded" + ((int) progress) + "%..");
-                    }
-                });
-
+    public void saveChildminderPhoto() {
 
     }
 
     @OnClick(R.id.share)
-    public void assignPic(){
+    public void assignPic() {
+        createFragmentActivities();
         mShareList.setVisibility(View.VISIBLE);
         // get intent if intent is !null then setVisibility
         mSavePicture.setVisibility(View.GONE);
         mSharePicture.setVisibility(View.GONE);
         mInsertComment.setVisibility(View.GONE);
-       // Uri assignedPicture = Uri.parse(mPath);
+        // Uri assignedPicture = Uri.parse(mPath);
     }
 
     @OnClick(R.id.insert_comment)
-    public void insertComment (){
-        Toast.makeText(this, "write a short description", Toast.LENGTH_SHORT).show();
+    public void insertComment() {
+        AlertDialog.Builder addDescription = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogAddDescription = inflater.inflate(R.layout.dialog_add_description, null);
+        final EditText mWritePhotoDescription = (EditText) dialogAddDescription.findViewById(R.id.write_description);
+        addDescription.setView(dialogAddDescription);
+        addDescription.setTitle("Add description");
+        addDescription.setPositiveButton("add", (new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                photoDescription = mWritePhotoDescription.getText().toString();
+                SharedPreferences.Editor sharePreference =
+                        getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE).edit();
+                sharePreference.putString("getDescription", photoDescription);
+                sharePreference.apply();
+            }
+        }));
+
+        addDescription.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "Don't forget to write description later", Toast.LENGTH_SHORT).show();
+            }
+        });
+        AlertDialog setDescription = addDescription.create();
+        WindowManager.LayoutParams wlp = setDescription.getWindow().getAttributes();
+        wlp.gravity = Gravity.BOTTOM | Gravity.CENTER;
+        setDescription.show();
     }
-
-
 
     // create Fragment
     private void createFragmentActivities() {
         // create widget_list_ingredients card fragment
         ShareListFragment shareListFragment = new ShareListFragment();
-
+        Bundle args = new Bundle();
+        SharedPreferences uploadDescription = getSharedPreferences(PREFERENCE, MODE_PRIVATE);
+        SharedPreferences picturePath = getSharedPreferences(PREFERENCE, MODE_PRIVATE);
+        String saveDescription = uploadDescription.getString("getDescription", null);
+        String savePath = picturePath.getString("getPath", null);
+        if (saveDescription != null) {
+            args.putString("updatedChildPicture", saveDescription);
+        }
+        //args.putString("imagePath", Uri.parse(savePath).getLastPathSegment());
+        args.putString("imagePath", savePath);
+        shareListFragment.setArguments(args);
         // add fragment to the activity using Fragment manager
         FragmentManager fragmentManager = getSupportFragmentManager();
-
         // transaction
         fragmentManager.beginTransaction()
-                .replace(R.id.share_list_fragment,shareListFragment)
+                .replace(R.id.share_list_fragment, shareListFragment)
                 .commit();
+
+
+    }
+
+    private void launchCamera() {
+
+        // Create the capture image intent
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the temporary File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = PictureAttributes.tempFileCreation(this);
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+
+                // Get the path of the temporary file
+                mTempPath = photoFile.getAbsolutePath();
+                savePath(mTempPath);
+                // Get the content URI for the image file
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        FILE_PROVIDER_AUTHORITY,
+                        photoFile);
+
+                // Add the URI so the camera can store the image
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
+                // Launch the camera activity
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
 
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // If the image capture activity was called and was successful
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            // Process the image and set it to the TextView
+            SharedPreferences newPath = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
+            String path = newPath.getString("getPath", null);
+            setImagePreview(path);
+        } else {
+            // Otherwise, delete the temporary image file
+            PictureAttributes.deletePictureFile(this, mTempPath);
+        }
+    }
 
-
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 }
