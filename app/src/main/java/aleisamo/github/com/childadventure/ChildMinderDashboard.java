@@ -60,8 +60,8 @@ public class ChildMinderDashboard extends AppCompatActivity {
                 startActivity(intentChildProfile);
                 break;
             case R.id.gallery:
-                // Intent intentPhoto = new Intent(this, TakePhoto.class);
-                // startActivity(intentPhoto);
+                Intent galleryPhoto = new Intent(this, PhotoGallery.class);
+                startActivity(galleryPhoto);
                 break;
         }
     }

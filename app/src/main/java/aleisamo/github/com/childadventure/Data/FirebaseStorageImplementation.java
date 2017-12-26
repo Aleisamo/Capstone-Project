@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StreamDownloadTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayInputStream;
@@ -35,11 +36,11 @@ public class FirebaseStorageImplementation {
 
     // Image name name use when the picture is temp saved
     // folder where the picture will be stored
-    public void storeAndSavePicturePath(String imageName, final String folderName,
+    public void storeAndSavePicturePath(final String imageName, final String folderName,
                                         final ProgressDialog progressDialog,
                                         final String profileName, final String description) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        mBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+        mBitmap.compress(Bitmap.CompressFormat.JPEG, 40, byteArrayOutputStream);
         InputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
         //InputStream inputStream = new ByteArrayInputStream(byteArray);
         // final ProgressDialog progressDialog = new ProgressDialog(context);
@@ -55,12 +56,13 @@ public class FirebaseStorageImplementation {
                         ChildPicture childPicture = new ChildPicture(
                                 profileName,
                                 taskSnapshot.getDownloadUrl().toString(),
-                                description
+                                description,
+                                imageName
                         );
 
                         String pictureUploadKey = mDatabaseRef.push().getKey();
                         mDatabaseRef.child(pictureUploadKey).setValue(childPicture);
-                        Toast.makeText(context, "Picture uploaded to ChildMinder gallery",
+                        Toast.makeText(context, "Picture uploaded to"+ folderName,
                                 Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -80,6 +82,23 @@ public class FirebaseStorageImplementation {
                         progressDialog.setMessage("Uploaded" + ((int) progress) + "%..");
                     }
                 });*/
+    }
+
+
+
+    public void readDatabaseStorage(String folderName, String imageName){
+
+        StorageReference storage = mStorageRef.child(folderName).child(imageName);
+        storage.getStream().addOnSuccessListener(new OnSuccessListener<StreamDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(StreamDownloadTask.TaskSnapshot taskSnapshot) {
+
+                InputStream childPicture = taskSnapshot.getStream();
+
+            }
+        });
+
+
     }
 
 

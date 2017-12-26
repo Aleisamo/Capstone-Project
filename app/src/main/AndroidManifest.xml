@@ -47,7 +47,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ChildMinderDashboard" />
         </activity>
-        <activity android:name=".TakePhoto" />
+        <activity android:name=".PhotoGallery"
+            android:label="Photo Gallery"
+            android:parentActivityName=".ChildMinderDashboard">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ChildMinderDashboard"/>
+        </activity>
         <activity
             android:name=".WeekInfo"
             android:label="@string/title_activity_week_info"

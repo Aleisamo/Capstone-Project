@@ -1,6 +1,7 @@
 package aleisamo.github.com.childadventure;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -22,9 +24,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.File;
 import java.io.IOException;
 
+import aleisamo.github.com.childadventure.Data.FirebaseStorageImplementation;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -54,9 +62,17 @@ public class TakePicture extends AppCompatActivity {
     EditText mPhotoDescription;
 
 
-    private String photoDescription;
     private String mTempPath;
     private SharedPreferences.Editor pictureName;
+
+
+    FirebaseStorageImplementation mFirebaseStorageImp;
+    FirebaseStorage mFirebaseStorage;
+    FirebaseDatabase mFireBaseDataBase;
+    DatabaseReference mDatabaseRef;
+    StorageReference mStorageRef;
+    private SharedPreferences.Editor getDescription;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +81,23 @@ public class TakePicture extends AppCompatActivity {
         ButterKnife.bind(this);
         Intent photoPath = getIntent();
         if (photoPath != null) {
-            setImagePreview(photoPath.getStringExtra(String.valueOf(R.string.path)));
+             String currentPath = photoPath.getStringExtra(String.valueOf(R.string.path));
+            setImagePreview(currentPath);
+            savePath(currentPath);
         }
+
        /* if (savedInstanceState == null) {
             createFragmentActivities();
         }*/
+
+        // access to firebase storage
+        mFirebaseStorage = FirebaseStorage.getInstance();
+        // create storage ref
+        mStorageRef = mFirebaseStorage.getReference();
+        // database reference
+        mFireBaseDataBase = FirebaseDatabase.getInstance();
+        mDatabaseRef = mFireBaseDataBase.getReference().child("childminder_uploaded");
+
     }
 
     public void setImagePreview(String mPath) {
@@ -91,8 +119,10 @@ public class TakePicture extends AppCompatActivity {
 
     @OnClick(R.id.save)
     public void saveChildminderPhoto() {
-
+        String childminderName = getString(R.string.childminderFolder);
+        savePicture(childminderName, childminderName);
     }
+
 
     @OnClick(R.id.share)
     public void assignPic() {
@@ -116,11 +146,11 @@ public class TakePicture extends AppCompatActivity {
         addDescription.setPositiveButton("add", (new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                photoDescription = mWritePhotoDescription.getText().toString();
-                SharedPreferences.Editor sharePreference =
+                String photoDescription = mWritePhotoDescription.getText().toString();
+                getDescription =
                         getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE).edit();
-                sharePreference.putString("getDescription", photoDescription);
-                sharePreference.apply();
+                getDescription.putString("getDescription", photoDescription);
+                getDescription.apply();
             }
         }));
 
@@ -140,25 +170,42 @@ public class TakePicture extends AppCompatActivity {
     private void createFragmentActivities() {
         // create widget_list_ingredients card fragment
         ShareListFragment shareListFragment = new ShareListFragment();
-        Bundle args = new Bundle();
         SharedPreferences uploadDescription = getSharedPreferences(PREFERENCE, MODE_PRIVATE);
         SharedPreferences picturePath = getSharedPreferences(PREFERENCE, MODE_PRIVATE);
         String saveDescription = uploadDescription.getString("getDescription", null);
         String savePath = picturePath.getString("getPath", null);
-        if (saveDescription != null) {
-            args.putString("updatedChildPicture", saveDescription);
-        }
-        //args.putString("imagePath", Uri.parse(savePath).getLastPathSegment());
+        // Create bundle put arguments
+        Bundle args = new Bundle();
+        args.putString("updatedChildPicture", saveDescription);
         args.putString("imagePath", savePath);
         shareListFragment.setArguments(args);
         // add fragment to the activity using Fragment manager
         FragmentManager fragmentManager = getSupportFragmentManager();
         // transaction
-        fragmentManager.beginTransaction()
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_up,R.anim.slide_down);
+        /*fragmentManager.beginTransaction()
                 .replace(R.id.share_list_fragment, shareListFragment)
-                .commit();
+                .commit();*/
+        fragmentTransaction.replace(R.id.share_list_fragment,shareListFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 
+    private void savePicture(String profileName, String folderName) {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        SharedPreferences uploadDescription = getSharedPreferences(PREFERENCE, MODE_PRIVATE);
+        String getDescription = uploadDescription.getString("getDescription", null);
+        SharedPreferences picturePath = getSharedPreferences(PREFERENCE, MODE_PRIVATE);
+        String getImageName =picturePath.getString("getPath", null);
+        File file = new File(getImageName);
+        String name = file.getName();
+        Bitmap mBitmap = PictureAttributes.resamplePicture(this,getImageName);
+        mFirebaseStorageImp = new FirebaseStorageImplementation(mBitmap, mStorageRef,
+                this, mDatabaseRef);
 
+        mFirebaseStorageImp.storeAndSavePicturePath(name, folderName, progressDialog,
+                profileName, getDescription);
     }
 
     private void launchCamera() {
@@ -215,5 +262,6 @@ public class TakePicture extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+
     }
 }

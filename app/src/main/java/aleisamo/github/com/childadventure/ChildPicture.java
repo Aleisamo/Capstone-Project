@@ -3,22 +3,28 @@ package aleisamo.github.com.childadventure;
 public class ChildPicture {
 
     private String name;
-    private String childPictureURl;
+    private String storageFileName;
+    private String childPictureUrl;
     private String childPictureDescription;
 
-    public ChildPicture(String key, String childPictureURl, String childpictureDescription){
+    public ChildPicture() {
+    }
+
+    public ChildPicture(String key, String childPictureUrl, String childPictureDescription, String storageFileName) {
 
         this.name = key;
-        this.childPictureURl = childPictureURl;
-        this.childPictureDescription = childpictureDescription;
+        this.storageFileName = storageFileName;
+        this.childPictureUrl = childPictureUrl;
+        this.childPictureDescription = childPictureDescription;
     }
 
-    public String getChildPictureURl() {
-        return childPictureURl;
+
+    public String getChildPictureUrl() {
+        return childPictureUrl;
     }
 
-    public void setChildPictureURl(String childPictureURl) {
-        this.childPictureURl = childPictureURl;
+    public void setChildPictureUrl(String childPictureUrl) {
+        this.childPictureUrl = childPictureUrl;
     }
 
     public String getName() {
@@ -35,5 +41,13 @@ public class ChildPicture {
 
     public void setChildPictureDescription(String childPictureDescription) {
         this.childPictureDescription = childPictureDescription;
+    }
+
+    public String getStorageFileName() {
+        return storageFileName;
+    }
+
+    public void setStorageFileName(String storageFileName) {
+        this.storageFileName = storageFileName;
     }
 }

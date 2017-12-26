@@ -13,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -26,19 +25,15 @@ import com.squareup.picasso.Picasso;
 import aleisamo.github.com.childadventure.Data.FirebaseStorageImplementation;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class ShareListFragment extends Fragment {
 
     @BindView(R.id.share_list)
     RecyclerView mShareList;
-    @BindView(R.id.childminder_photo)
-    ImageView mChildminderPhoto;
 
     private GridLayoutManager childShareLayoutManager;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDataReference;
-    private DatabaseReference mUploadPictureReference;
     private FirebaseRecyclerAdapter<Child, ChildShareViewHolder> mChildShareAdapter;
     private String getDescription;
     private String getImageName;
@@ -84,12 +79,6 @@ public class ShareListFragment extends Fragment {
         childShareLayoutManager = new GridLayoutManager(getContext(), numberColumns);
         readChild(childShareLayoutManager);
         return rootView;
-    }
-
-    @OnClick(R.id.childminder_photo)
-    public void saveToChildminderGallery() {
-        String childminderName = getString(R.string.childminderFolder);
-        savePicture(childminderName, childminderName);
     }
 
     public void readChild(LinearLayoutManager manager) {
