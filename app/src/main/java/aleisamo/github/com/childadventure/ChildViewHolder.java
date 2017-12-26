@@ -21,7 +21,6 @@ public class ChildViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.photo_profile)
     ImageView mChildPhoto;
 
-    //private final OnItemClickListener clickListener;
     //private final List<Child> children;
 
 
@@ -33,7 +32,6 @@ public class ChildViewHolder extends RecyclerView.ViewHolder {
         //this.children = children;
         //itemView.setOnClickListener(this);
     }
-
 
 
 }

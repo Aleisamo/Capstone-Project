@@ -8,12 +8,13 @@ public class Child {
     private ChildDetails childDetails;
 
 
-    public Child(){}
+    public Child() {
+    }
 
-    public Child (String name, String age, String pictureUrl, ChildDetails chilcDetails){
-        this.name =name;
-        this.age =age;
-        this.pictureUrl =pictureUrl;
+    public Child(String name, String age, String pictureUrl, ChildDetails chilcDetails) {
+        this.name = name;
+        this.age = age;
+        this.pictureUrl = pictureUrl;
         this.childDetails = chilcDetails;
     }
 

@@ -32,7 +32,6 @@ public class ChildProfileFragment extends Fragment {
 
     private static final String LAYOUT_CHILD = "layoutManagerChildList";
     private LinearLayoutManager childListLayoutManager;
-    private OnItemClickListener callback;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseChildReference;
     private FirebaseRecyclerAdapter<Child, ChildViewHolder> mChildAdapter;
@@ -161,11 +160,11 @@ public class ChildProfileFragment extends Fragment {
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String path_detail =mChildAdapter.getRef(position).toString();
-                        Intent childDetails = new Intent(getActivity(),ChildProfileDetails.class);
-                        childDetails.putExtra("path_details",path_detail);
+                        String path_detail = mChildAdapter.getRef(position).toString();
+                        Intent childDetails = new Intent(getActivity(), ChildProfileDetails.class);
+                        childDetails.putExtra("path_details", path_detail);
                         startActivity(childDetails);
-                       // Toast.makeText(getContext(), "Child Removed from the list" + mChildAdapter.getRef(position).child("childDetails").child("age"), Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getContext(), "Child Removed from the list" + mChildAdapter.getRef(position).child("childDetails").child("age"), Toast.LENGTH_SHORT).show();
                     }
                 });
 

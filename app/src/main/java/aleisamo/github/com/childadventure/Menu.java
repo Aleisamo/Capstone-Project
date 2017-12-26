@@ -7,13 +7,14 @@ public class Menu {
     private String snacks;
     private String dinner;
 
-    public Menu(){}
+    public Menu() {
+    }
 
-    public Menu(String breakfast, String snacks, String lunch, String dinner){
-        this.breakfast= breakfast;
-        this.snacks= snacks;
-        this.lunch= lunch;
-        this.dinner= dinner;
+    public Menu(String breakfast, String snacks, String lunch, String dinner) {
+        this.breakfast = breakfast;
+        this.snacks = snacks;
+        this.lunch = lunch;
+        this.dinner = dinner;
     }
 
 

@@ -69,7 +69,6 @@ public class ChildminderGalleryFragment extends Fragment {
 
             @Override
             protected void onBindViewHolder(final GalleryViewHolder holder, int position, ChildPicture model) {
-                final String childPictureUrl = model.getChildPictureUrl();
                 String pictureDescription = model.getChildPictureDescription();
                 String fileName = model.getStorageFileName();
                 StorageReference imageRef = mStorageRef.child("image" + getString(R.string.childminderFolder))

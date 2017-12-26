@@ -7,10 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 public class PhotoGallery extends AppCompatActivity {
 
     @Override
-    protected void onCreate( Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_gallery);
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) {
             createFragmentActivities();
         }
     }
@@ -31,7 +31,6 @@ public class PhotoGallery extends AppCompatActivity {
     }
 
     // TODO Create Children fragment
-
 
 
 }

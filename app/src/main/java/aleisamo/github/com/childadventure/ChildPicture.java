@@ -4,28 +4,17 @@ public class ChildPicture {
 
     private String name;
     private String storageFileName;
-    private String childPictureUrl;
     private String childPictureDescription;
 
     public ChildPicture() {
     }
 
-    public ChildPicture(String key, String childPictureUrl, String childPictureDescription, String storageFileName) {
-
+    public ChildPicture(String key, String childPictureDescription, String storageFileName) {
         this.name = key;
         this.storageFileName = storageFileName;
-        this.childPictureUrl = childPictureUrl;
         this.childPictureDescription = childPictureDescription;
     }
 
-
-    public String getChildPictureUrl() {
-        return childPictureUrl;
-    }
-
-    public void setChildPictureUrl(String childPictureUrl) {
-        this.childPictureUrl = childPictureUrl;
-    }
 
     public String getName() {
         return name;

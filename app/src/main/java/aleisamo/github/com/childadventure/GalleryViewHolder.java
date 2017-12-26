@@ -14,12 +14,12 @@ public class GalleryViewHolder extends RecyclerView.ViewHolder {
     ImageView mPhotoGallery;
     @BindView(R.id.text_id)
     TextView mComment;
+
     public GalleryViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         mView = itemView;
     }
-
 
 
 }

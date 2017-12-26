@@ -55,14 +55,13 @@ public class FirebaseStorageImplementation {
 
                         ChildPicture childPicture = new ChildPicture(
                                 profileName,
-                                taskSnapshot.getDownloadUrl().toString(),
                                 description,
                                 imageName
                         );
 
                         String pictureUploadKey = mDatabaseRef.push().getKey();
                         mDatabaseRef.child(pictureUploadKey).setValue(childPicture);
-                        Toast.makeText(context, "Picture uploaded to"+ folderName,
+                        Toast.makeText(context, "Picture uploaded to" + folderName,
                                 Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -85,8 +84,7 @@ public class FirebaseStorageImplementation {
     }
 
 
-
-    public void readDatabaseStorage(String folderName, String imageName){
+    public void readDatabaseStorage(String folderName, String imageName) {
 
         StorageReference storage = mStorageRef.child(folderName).child(imageName);
         storage.getStream().addOnSuccessListener(new OnSuccessListener<StreamDownloadTask.TaskSnapshot>() {

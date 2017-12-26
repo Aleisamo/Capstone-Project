@@ -17,7 +17,7 @@ public class CameraLaunch {
     Context context;
     File photoFile;
 
-    public CameraLaunch (Context context){
+    public CameraLaunch(Context context) {
         this.context = context;
     }
 

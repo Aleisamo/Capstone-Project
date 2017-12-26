@@ -11,9 +11,10 @@ public class FamilyMember {
     private String address1;
     private String address2;
 
-    public FamilyMember(){}
+    public FamilyMember() {
+    }
 
-    public FamilyMember(String memberName1, String memberName2, String phoneNumber1, String phoneNumber2, String email1, String email2, String address1, String address2){
+    public FamilyMember(String memberName1, String memberName2, String phoneNumber1, String phoneNumber2, String email1, String email2, String address1, String address2) {
         this.memberName1 = memberName1;
         this.memberName2 = memberName2;
         this.phoneNumber1 = phoneNumber1;

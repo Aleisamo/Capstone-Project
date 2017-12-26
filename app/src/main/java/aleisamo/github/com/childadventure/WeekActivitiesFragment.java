@@ -9,12 +9,13 @@ import android.view.ViewGroup;
 public class WeekActivitiesFragment extends Fragment {
 
 
-    public WeekActivitiesFragment(){}
+    public WeekActivitiesFragment() {
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_week_activities,container,false);
+        View rootView = inflater.inflate(R.layout.fragment_week_activities, container, false);
         return rootView;
     }
 }

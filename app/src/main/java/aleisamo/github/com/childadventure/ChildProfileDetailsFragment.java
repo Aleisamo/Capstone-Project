@@ -61,6 +61,7 @@ public class ChildProfileDetailsFragment extends Fragment {
 
     public ChildProfileDetailsFragment() {
     }
+
     @Override
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -127,8 +128,6 @@ public class ChildProfileDetailsFragment extends Fragment {
 
             }
         });*/
-
-
 
 
 }

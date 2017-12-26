@@ -11,8 +11,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -81,7 +81,7 @@ public class TakePicture extends AppCompatActivity {
         ButterKnife.bind(this);
         Intent photoPath = getIntent();
         if (photoPath != null) {
-             String currentPath = photoPath.getStringExtra(String.valueOf(R.string.path));
+            String currentPath = photoPath.getStringExtra(String.valueOf(R.string.path));
             setImagePreview(currentPath);
             savePath(currentPath);
         }
@@ -106,8 +106,7 @@ public class TakePicture extends AppCompatActivity {
     }
 
     public void savePath(String mPath) {
-        pictureName =
-                getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE).edit();
+        pictureName = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE).edit();
         pictureName.putString("getPath", mPath);
         pictureName.apply();
     }
@@ -183,11 +182,11 @@ public class TakePicture extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         // transaction
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.slide_up,R.anim.slide_down);
+        fragmentTransaction.setCustomAnimations(R.anim.slide_up, R.anim.slide_down);
         /*fragmentManager.beginTransaction()
                 .replace(R.id.share_list_fragment, shareListFragment)
                 .commit();*/
-        fragmentTransaction.replace(R.id.share_list_fragment,shareListFragment);
+        fragmentTransaction.replace(R.id.share_list_fragment, shareListFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -197,10 +196,10 @@ public class TakePicture extends AppCompatActivity {
         SharedPreferences uploadDescription = getSharedPreferences(PREFERENCE, MODE_PRIVATE);
         String getDescription = uploadDescription.getString("getDescription", null);
         SharedPreferences picturePath = getSharedPreferences(PREFERENCE, MODE_PRIVATE);
-        String getImageName =picturePath.getString("getPath", null);
+        String getImageName = picturePath.getString("getPath", null);
         File file = new File(getImageName);
         String name = file.getName();
-        Bitmap mBitmap = PictureAttributes.resamplePicture(this,getImageName);
+        Bitmap mBitmap = PictureAttributes.resamplePicture(this, getImageName);
         mFirebaseStorageImp = new FirebaseStorageImplementation(mBitmap, mStorageRef,
                 this, mDatabaseRef);
 
@@ -241,9 +240,7 @@ public class TakePicture extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
-
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -111,7 +111,7 @@ class PictureAttributes {
     }
 
 
-     static String savePictureDeviceStorage(Context context, Bitmap image) {
+    static String savePictureDeviceStorage(Context context, Bitmap image) {
 
         String savedImagePath = null;
 
@@ -150,9 +150,7 @@ class PictureAttributes {
     }
 
 
-
-
-    static void sharePicturewithChildrens(){
+    static void sharePicturewithChildrens() {
 
     }
 

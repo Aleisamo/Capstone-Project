@@ -23,5 +23,4 @@ public class ChildShareViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-
 }

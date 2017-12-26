@@ -12,7 +12,7 @@ public class ChildProfileDetails extends AppCompatActivity {
         setContentView(R.layout.activity_child_profile_details);
 
 
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) {
             createFragmentActivities(getIntent().getStringExtra("path_details"));
         }
     }
@@ -21,14 +21,14 @@ public class ChildProfileDetails extends AppCompatActivity {
     private void createFragmentActivities(String pathDetails) {
         // create widget_list_ingredients card fragment
         Bundle args = new Bundle();
-        args.putString("pathDetails",pathDetails);
+        args.putString("pathDetails", pathDetails);
         ChildProfileDetailsFragment childDetailsFragment = new ChildProfileDetailsFragment();
         childDetailsFragment.setArguments(args);
         // add fragment to the activity using Fragment manager
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment,childDetailsFragment)
+                .replace(R.id.fragment, childDetailsFragment)
                 .commit();
 
     }

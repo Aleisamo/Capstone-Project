@@ -4,12 +4,12 @@ public class Day {
 
     private String name;
     private String childKey;
-
     private Menu menu;
-    public Day(){
+
+    public Day() {
     }
 
-    public Day (String name, Menu menu,String childKey){
+    public Day(String name, Menu menu, String childKey) {
         this.menu = menu;
         this.name = name;
         this.childKey = childKey;
@@ -30,6 +30,7 @@ public class Day {
     public void setMenu(Menu menu) {
         this.menu = menu;
     }
+
     public String getName() {
         return name;
     }

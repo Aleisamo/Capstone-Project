@@ -27,7 +27,7 @@ public class ChildMinderDashboard extends AppCompatActivity {
     private static final String FILE_PROVIDER_AUTHORITY = "aleisamo.github.com.fileprovider";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_STORAGE_PERMISSION = 1;
-    private static final String PREFERENCE = "reference" ;
+    private static final String PREFERENCE = "reference";
     @BindView(R.id.take_photo)
     Button takePhoto;
     @BindView(R.id.week_info)
@@ -68,7 +68,7 @@ public class ChildMinderDashboard extends AppCompatActivity {
 
     public void takePhoto() {
         // Check for the external storage permission
-       if (ContextCompat.checkSelfPermission(this,
+        if (ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
@@ -83,7 +83,7 @@ public class ChildMinderDashboard extends AppCompatActivity {
     }
 
 
-   private void launchCamera() {
+    private void launchCamera() {
 
         // Create the capture image intent
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -123,15 +123,14 @@ public class ChildMinderDashboard extends AppCompatActivity {
                 }*/
 
                 // Add the URI so the camera can store the image
-               takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
                 // Launch the camera activity
-               startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
 
     }
-
 
 
     @Override
@@ -144,7 +143,7 @@ public class ChildMinderDashboard extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // If you get permission, launch the camera
                     launchCamera();
-                   //mTempPath = cameraServices.launchCamera();
+                    //mTempPath = cameraServices.launchCamera();
                 } else {
                     // If you do not get permission, show a Toast
                     Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show();
@@ -169,7 +168,7 @@ public class ChildMinderDashboard extends AppCompatActivity {
     private void processAndSetImage() {
         Intent intent = new Intent(this, TakePicture.class);
         SharedPreferences sendUriString = getSharedPreferences(PREFERENCE, MODE_PRIVATE);
-        intent.putExtra(String.valueOf(R.string.path), sendUriString.getString("getUriPath",null));
+        intent.putExtra(String.valueOf(R.string.path), sendUriString.getString("getUriPath", null));
         startActivity(intent);
     }
 
