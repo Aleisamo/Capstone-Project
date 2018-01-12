@@ -114,14 +114,6 @@ public class ChildMinderDashboard extends AppCompatActivity {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         FILE_PROVIDER_AUTHORITY,
                         photoFile);
-               /* Bitmap bitmaprotated = BitmapFactory.decodeFile(mTempPath);
-                if (bitmaprotated.getWidth() >bitmaprotated.getHeight()){
-                    Matrix matrix = new Matrix();
-                    matrix.postRotate(90);
-                    bitmaprotated  = Bitmap.createBitmap(bitmaprotated,0,0,
-                            bitmaprotated.getWidth(),bitmaprotated.getHeight(),matrix,true);
-                }*/
-
                 // Add the URI so the camera can store the image
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 

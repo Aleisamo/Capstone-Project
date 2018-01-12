@@ -6,8 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,12 +25,12 @@ import aleisamo.github.com.childadventure.Data.FirebaseStorageImplementation;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ShareListFragment extends Fragment {
+public class ShareListActvity extends AppCompatActivity {
 
     @BindView(R.id.share_list)
     RecyclerView mShareList;
-
-    private GridLayoutManager childShareLayoutManager;
+    private final String activityName = "ShareListActivity";
+    private LinearLayoutManager childShareLayoutManager;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDataReference;
     private FirebaseRecyclerAdapter<Child, ChildShareViewHolder> mChildShareAdapter;
@@ -46,21 +45,15 @@ public class ShareListFragment extends Fragment {
     StorageReference mStorageRef;
     private String getImagePath;
 
-
-    public ShareListFragment() {
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_share_list, container, false);
-        ButterKnife.bind(this, rootView);
-        // get arguments from TakePicture activity bundle
-        getDescription = getArguments().getString("updatedChildPicture");
-        getImageName = Uri.parse(getArguments().getString("imagePath")).getLastPathSegment();
-        getImagePath = getArguments().getString("imagePath");
-        Bitmap mBitmap = PictureAttributes.resamplePicture(getContext(), getImagePath);
-
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_share_list);
+        ButterKnife.bind(this);
+        getDescription = getIntent().getStringExtra("updatedChildPicture");
+        getImageName = Uri.parse(getIntent().getStringExtra("imagePath")).getLastPathSegment();
+        getImagePath = getIntent().getStringExtra("imagePath");
+        Bitmap mBitmap = PictureAttributes.resamplePicture(this, getImagePath);
         // firebase storage and database references
         // access to firebase storage
         mFirebaseStorage = FirebaseStorage.getInstance();
@@ -70,15 +63,11 @@ public class ShareListFragment extends Fragment {
         mFireBaseDataBase = FirebaseDatabase.getInstance();
         mDatabaseRef = mFireBaseDataBase.getReference().child("pictures_uploaded");
         mFirebaseStorageImp = new FirebaseStorageImplementation(mBitmap, mStorageRef,
-                getContext(), mDatabaseRef);
-
-        // GridView params
-        int numberColumns = 3;
+                this, mDatabaseRef);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDataReference = mFirebaseDatabase.getReference().child("child");
-        childShareLayoutManager = new GridLayoutManager(getContext(), numberColumns);
+        childShareLayoutManager = new LinearLayoutManager(getApplicationContext());
         readChild(childShareLayoutManager);
-        return rootView;
     }
 
     public void readChild(LinearLayoutManager manager) {
@@ -103,33 +92,29 @@ public class ShareListFragment extends Fragment {
                 if (childPictureUrl.isEmpty()) {
                     holder.mChildPhoto.setImageResource(R.mipmap.ic_profile);
                 } else {
-                    Picasso.with(getContext()).load(childPictureUrl).into(holder.mChildPhoto);
+                    Picasso.with(getApplicationContext()).load(childPictureUrl).into(holder.mChildPhoto);
                 }
                 holder.mChildName.setText(childName);
                 //assign photo to the child
-
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // save photo path within childPicture object
-
-
+                        savePicture(childName, getString(R.string.childFolder));
                     }
                 });
+
             }
         };
         mShareList.setLayoutManager(manager);
         mShareList.setAdapter(mChildShareAdapter);
     }
 
-    private void closeFragment() {
-    }
-
     // change method name assignChildPicture
     private void savePicture(String profileName, String folderName) {
-        final ProgressDialog progressDialog = new ProgressDialog(getContext());
-      //  mFirebaseStorageImp.storeAndSavePicturePath(getImageName, folderName, progressDialog,
-        //        profileName, getDescription,);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        mFirebaseStorageImp.storeAndSavePicturePath(getImageName, folderName, progressDialog,
+                profileName, getDescription,activityName);
     }
 
     @Override
@@ -142,5 +127,10 @@ public class ShareListFragment extends Fragment {
     public void onStop() {
         super.onStop();
         mChildShareAdapter.startListening();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

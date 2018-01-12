@@ -1,6 +1,6 @@
 package aleisamo.github.com.childadventure;
 
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -34,8 +33,6 @@ public class ChildminderGalleryFragment extends Fragment {
 
     @BindView(R.id.recycle_gallery)
     RecyclerView mRecycleGallery;
-    @BindView(R.id.test)
-    ImageView mImageView;
 
     public ChildminderGalleryFragment() {
     }
@@ -50,7 +47,7 @@ public class ChildminderGalleryFragment extends Fragment {
         mStorageRef = mFirebaseStorage.getReference();
         mDataRef = mFirebaseDatabase.getReference().child("childminder_uploaded");
         int numberColumns = 3;
-        childminderGridLayout = new GridLayoutManager(getContext(), numberColumns);
+        childminderGridLayout = new GridLayoutManager(getContext(),numberColumns);
         displayImage(childminderGridLayout);
         return rootView;
     }
@@ -68,8 +65,8 @@ public class ChildminderGalleryFragment extends Fragment {
             }
 
             @Override
-            protected void onBindViewHolder(final GalleryViewHolder holder, int position, ChildPicture model) {
-                String pictureDescription = model.getChildPictureDescription();
+            protected void onBindViewHolder(final GalleryViewHolder holder, final int position, ChildPicture model) {
+                //String pictureDescription = model.getChildPictureDescription();
                 String fileName = model.getStorageFileName();
                 StorageReference imageRef = mStorageRef.child("image" + getString(R.string.childminderFolder))
                         .child(fileName);
@@ -77,7 +74,16 @@ public class ChildminderGalleryFragment extends Fragment {
                         .using(new FirebaseImageLoader())
                         .load(imageRef)
                         .into(holder.mPhotoGallery);
-                holder.mComment.setText(pictureDescription);
+                //holder.mComment.setText(pictureDescription);
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String path_detail = mGalleryAdapter.getRef(position).toString();
+                        Intent intentPicture = new Intent(getContext(),PictureDetails.class);
+                        intentPicture.putExtra("dataRef", path_detail);
+                        startActivity(intentPicture);
+                    }
+                });
             }
         };
 
@@ -86,14 +92,6 @@ public class ChildminderGalleryFragment extends Fragment {
 
     }
 
-    public void findPictureStore(Uri uri) {
-
-    }
-
-    public void displayImageView(ImageView imageView) {
-
-
-    }
 
     @Override
     public void onStart() {

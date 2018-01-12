@@ -12,7 +12,11 @@ class ChildDetails {
     private String allergies;
     private String relevantInformation;
 
-    public ChildDetails(String name, String age, String pictureUrl, String dob, FamilyMember familyMember, String address, String languages, String allergies, String relevantInformation) {
+    public ChildDetails(String name, String age,
+                        String pictureUrl, String dob,
+                        FamilyMember familyMember,
+                        String address, String languages,
+                        String allergies, String relevantInformation) {
         this.name = name;
         this.age = age;
         this.pictureUrl = pictureUrl;

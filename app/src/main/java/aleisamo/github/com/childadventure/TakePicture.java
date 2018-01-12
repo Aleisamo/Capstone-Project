@@ -11,8 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -85,11 +83,6 @@ public class TakePicture extends AppCompatActivity {
             setImagePreview(currentPath);
             savePath(currentPath);
         }
-
-       /* if (savedInstanceState == null) {
-            createFragmentActivities();
-        }*/
-
         // access to firebase storage
         mFirebaseStorage = FirebaseStorage.getInstance();
         // create storage ref
@@ -125,13 +118,7 @@ public class TakePicture extends AppCompatActivity {
 
     @OnClick(R.id.share)
     public void assignPic() {
-        createFragmentActivities();
-        mShareList.setVisibility(View.VISIBLE);
-        // get intent if intent is !null then setVisibility
-        mSavePicture.setVisibility(View.GONE);
-        mSharePicture.setVisibility(View.GONE);
-        mInsertComment.setVisibility(View.GONE);
-        // Uri assignedPicture = Uri.parse(mPath);
+        intentShareListActivity();
     }
 
     @OnClick(R.id.insert_comment)
@@ -166,29 +153,17 @@ public class TakePicture extends AppCompatActivity {
     }
 
     // create Fragment
-    private void createFragmentActivities() {
+    private void intentShareListActivity() {
+        Intent intent = new Intent(TakePicture.this, ShareListActvity.class);
         // create widget_list_ingredients card fragment
-        ShareListFragment shareListFragment = new ShareListFragment();
         SharedPreferences uploadDescription = getSharedPreferences(PREFERENCE, MODE_PRIVATE);
         SharedPreferences picturePath = getSharedPreferences(PREFERENCE, MODE_PRIVATE);
         String saveDescription = uploadDescription.getString("getDescription", null);
         String savePath = picturePath.getString("getPath", null);
         // Create bundle put arguments
-        Bundle args = new Bundle();
-        args.putString("updatedChildPicture", saveDescription);
-        args.putString("imagePath", savePath);
-        shareListFragment.setArguments(args);
-        // add fragment to the activity using Fragment manager
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        // transaction
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.slide_up, R.anim.slide_down);
-        /*fragmentManager.beginTransaction()
-                .replace(R.id.share_list_fragment, shareListFragment)
-                .commit();*/
-        fragmentTransaction.replace(R.id.share_list_fragment, shareListFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        intent.putExtra("updatedChildPicture", saveDescription);
+        intent.putExtra("imagePath", savePath);
+        startActivity(intent);
     }
 
     private void savePicture(String profileName, String folderName) {
@@ -204,7 +179,7 @@ public class TakePicture extends AppCompatActivity {
                 this, mDatabaseRef);
 
         mFirebaseStorageImp.storeAndSavePicturePath(name, folderName, progressDialog,
-                profileName, getDescription);
+                profileName, getDescription, getLocalClassName());
     }
 
     private void launchCamera() {

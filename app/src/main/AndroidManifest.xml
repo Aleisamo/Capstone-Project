@@ -87,7 +87,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ChildProfile"/>
         </activity>
+        <activity android:name=".ShareListActvity"
+            android:label="@string/child_list"
+            />
 
-    </application>
+    <activity android:name=".PictureDetails"
+        android:label="@string/picture_details"
+        />
+</application>
 
 </manifest>

@@ -46,5 +46,10 @@
     <string name="add">Add description</string>
     <string name="childminderFolder">childminderPictures</string>
     <string name="childFolder">childFolder</string>
+    <string name="child_list">Child List</string>
+    <string name="shareListActivity">ShareListActivity</string>
+    <string name="picture_details">Picture details</string>
+    <string name="storageRef">storageRef</string>
+    <string name="folderName">childminder_uploaded</string>
 
 </resources>

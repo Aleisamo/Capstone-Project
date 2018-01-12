@@ -2,6 +2,7 @@ package aleisamo.github.com.childadventure.Data;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
@@ -17,7 +18,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
+import aleisamo.github.com.childadventure.ChildMinderDashboard;
 import aleisamo.github.com.childadventure.ChildPicture;
+import aleisamo.github.com.childadventure.ShareListActvity;
 
 public class FirebaseStorageImplementation {
     Bitmap mBitmap;
@@ -38,12 +41,14 @@ public class FirebaseStorageImplementation {
     // folder where the picture will be stored
     public void storeAndSavePicturePath(final String imageName, final String folderName,
                                         final ProgressDialog progressDialog,
-                                        final String profileName, final String description) {
+                                        final String profileName, final String description,
+                                        final String activityName) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         mBitmap.compress(Bitmap.CompressFormat.JPEG, 40, byteArrayOutputStream);
         InputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
         //InputStream inputStream = new ByteArrayInputStream(byteArray);
         // final ProgressDialog progressDialog = new ProgressDialog(context);
+        //
         progressDialog.setTitle("Uploading...");
         progressDialog.show();
         StorageReference storageReference = mStorageRef.child("image" + folderName + "/" + imageName);
@@ -63,6 +68,11 @@ public class FirebaseStorageImplementation {
                         mDatabaseRef.child(pictureUploadKey).setValue(childPicture);
                         Toast.makeText(context, "Picture uploaded to" + folderName,
                                 Toast.LENGTH_SHORT).show();
+                        if (activityName.equals("ShareListActivity")){
+                            ((ShareListActvity)context).finish();
+                            Intent mainActivity = new Intent(context, ChildMinderDashboard.class);
+                            context.startActivity(mainActivity);
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

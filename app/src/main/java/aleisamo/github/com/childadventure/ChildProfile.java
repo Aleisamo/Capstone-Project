@@ -21,8 +21,6 @@ public class ChildProfile extends AppCompatActivity {
 
     @BindView(R.id.add_profile)
     FloatingActionButton mAddChild;
-    @BindView(R.id.delete_profile)
-    FloatingActionButton mDeleteProfile;
     private String childName;
     private String childAge;
     private final String FILL = "FILL";

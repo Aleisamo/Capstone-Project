@@ -17,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ChildProfileDetailsFragment extends Fragment {
 
@@ -31,7 +32,7 @@ public class ChildProfileDetailsFragment extends Fragment {
     @BindView(R.id.dob)
     EditText mDOB;
     @BindView(R.id.child_address)
-    EditText mChildAddresse;
+    EditText mChildAddress;
     @BindView(R.id.family_member1)
     EditText mFamilyMember1;
     @BindView(R.id.family_member2)
@@ -56,6 +57,8 @@ public class ChildProfileDetailsFragment extends Fragment {
     EditText mRelevantInfo;
 
     private DatabaseReference mDataRef;
+    private DatabaseReference mDataRefName;
+
     private FirebaseDatabase mFirebase;
 
 
@@ -68,12 +71,12 @@ public class ChildProfileDetailsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_child_profile_details, container, false);
         ButterKnife.bind(this, rootView);
         mFirebase = FirebaseDatabase.getInstance();
-        ;
         Integer pathLength = mFirebase.getReference().child("child").toString().length();
 
         if (getArguments() != null) {
             String pathDetails = getArguments().getString("pathDetails").substring(pathLength + 1);
             mDataRef = mFirebase.getReference().child("child").child(pathDetails).child("childDetails");
+            mDataRefName = mFirebase.getReference().child("child").child(pathDetails);
             mUpdatedDetails(mDataRef);
 
         }
@@ -92,7 +95,7 @@ public class ChildProfileDetailsFragment extends Fragment {
                     mProfilePicture.setImageResource(R.mipmap.ic_profile);
                     mChildAge.setText(childDetails.getAge());
                     mDOB.setText(childDetails.getDob());
-                    mChildAddresse.setText(childDetails.getAddress());
+                    mChildAddress.setText(childDetails.getAddress());
                     mFamilyMember1.setText(childDetails.getFamilyMember().getMemberName1());
                     mAddress1.setText(childDetails.getFamilyMember().getAddress1());
                     mEmail1.setText(childDetails.getFamilyMember().getEmail1());
@@ -112,22 +115,36 @@ public class ChildProfileDetailsFragment extends Fragment {
 
             }
         });
-
-
     }
 
+    @OnClick(R.id.edit_profile)
+    public void updatedDetails() {
+        String childName = mChildName.getText().toString().trim();
+        String age = mChildAge.getText().toString().trim();
+        String dob = mDOB.getText().toString().trim();
+        String address = mChildAddress.getText().toString().trim();
+        String address1 = mAddress1.getText().toString().trim();
+        String address2 = mAddress2.getText().toString().trim();
+        String email1 = mEmail1.getText().toString().trim();
+        String email2 = mEmail2.getText().toString().trim();
+        String phone1 = mPhone1.getText().toString().trim();
+        String phone2 = mPhone2.getText().toString().trim();
+        String member1 = mFamilyMember1.getText().toString().trim();
+        String member2 = mFamilyMember2.getText().toString().trim();
+        String allergies = mAllergies.getText().toString().trim();
+        String languages = mLanguage.getText().toString().trim();
+        String relevantInfo = mRelevantInfo.getText().toString().trim();
 
+        FamilyMember familyMember = new FamilyMember(
+                member1, member2,
+                phone1, phone2,
+                email1, email2,
+                address1, address2);
 
-   /* @OnClick(R.id.dob)
-    public void pick() {
-        mCalendarView.setVisibility(View.VISIBLE);
-        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-
-
-            }
-        });*/
-
+        ChildDetails childDetails = new ChildDetails(childName, age, "", dob, familyMember, address, allergies, languages, relevantInfo);
+        mDataRef.setValue(childDetails);
+        Child child = new Child(childName, age, "", childDetails);
+        mDataRefName.setValue(child);
+    }
 
 }

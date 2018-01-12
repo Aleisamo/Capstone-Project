@@ -56,9 +56,6 @@ public class ChildProfileFragment extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseChildReference = firebaseDatabase.getReference().child("child");
         childListLayoutManager = new LinearLayoutManager(getContext());
-        //mListChildren.setLayoutManager(childListLayoutManager);
-        // get list of child read firebasedatabase
-        // child_adapter.setClickListener(callback);
         readChild(childListLayoutManager);
         return rootView;
     }

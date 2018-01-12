@@ -132,14 +132,14 @@ class PictureAttributes {
             savedImagePath = imageFile.getAbsolutePath();
             try {
                 OutputStream fOut = new FileOutputStream(imageFile);
-                image.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                image.compress(Bitmap.CompressFormat.JPEG,  50, fOut);
                 fOut.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             // Add the image to the system gallery
-            galleryAddPic(context, savedImagePath);
+          //  galleryAddPic(context, savedImagePath);
 
             // Show a Toast with the save location
             String savedMessage = context.getString(R.string.saved_message, savedImagePath);

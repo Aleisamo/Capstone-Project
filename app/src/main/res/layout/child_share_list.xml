@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linearShareChild"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/photo_profile"
-        android:layout_width="63dp"
-        android:layout_height="63dp"
-        android:background="@drawable/avatar"
-        android:src="@mipmap/ic_profile" />
-
-    <TextView
-        android:id="@+id/childName"
+    <RelativeLayout
+        android:id="@+id/image_child"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Child age" />
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/photo_profile"
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:background="@drawable/avatar"
+            android:src="@mipmap/ic_profile" />
+
+        <RadioButton
+            android:id="@+id/selected_child"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top" />
+    </RelativeLayout>
+        <TextView
+            android:id="@+id/childName"
+            android:layout_gravity="bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Child age" />
+
 </LinearLayout>
