@@ -57,11 +57,13 @@ public class FirebaseStorageImplementation {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         progressDialog.dismiss();
+                        String urlPicture = String.valueOf(taskSnapshot.getMetadata().getDownloadUrl());
 
                         ChildPicture childPicture = new ChildPicture(
                                 profileName,
                                 description,
-                                imageName
+                                imageName,
+                                urlPicture
                         );
 
                         String pictureUploadKey = mDatabaseRef.push().getKey();

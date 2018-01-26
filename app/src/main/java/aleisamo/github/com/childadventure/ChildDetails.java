@@ -1,6 +1,9 @@
 package aleisamo.github.com.childadventure;
 
-class ChildDetails {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+class ChildDetails  implements Parcelable{
 
     private String name;
     private String age;
@@ -11,6 +14,8 @@ class ChildDetails {
     private String languages;
     private String allergies;
     private String relevantInformation;
+
+
 
     public ChildDetails(String name, String age,
                         String pictureUrl, String dob,
@@ -28,9 +33,31 @@ class ChildDetails {
         this.relevantInformation = relevantInformation;
     }
 
-    public ChildDetails() {
+    public ChildDetails() {}
+
+
+    protected ChildDetails(Parcel in) {
+        name = in.readString();
+        age = in.readString();
+        pictureUrl = in.readString();
+        dob = in.readString();
+        address = in.readString();
+        languages = in.readString();
+        allergies = in.readString();
+        relevantInformation = in.readString();
     }
 
+    public static final Creator<ChildDetails> CREATOR = new Creator<ChildDetails>() {
+        @Override
+        public ChildDetails createFromParcel(Parcel in) {
+            return new ChildDetails(in);
+        }
+
+        @Override
+        public ChildDetails[] newArray(int size) {
+            return new ChildDetails[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -98,5 +125,22 @@ class ChildDetails {
 
     public void setFamilyMember(FamilyMember familyMember) {
         this.familyMember = familyMember;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(age);
+        dest.writeString(pictureUrl);
+        dest.writeString(dob);
+        dest.writeString(address);
+        dest.writeString(languages);
+        dest.writeString(allergies);
+        dest.writeString(relevantInformation);
     }
 }

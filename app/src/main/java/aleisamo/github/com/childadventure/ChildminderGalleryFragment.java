@@ -86,10 +86,8 @@ public class ChildminderGalleryFragment extends Fragment {
                 });
             }
         };
-
         mRecycleGallery.setLayoutManager(manager);
         mRecycleGallery.setAdapter(mGalleryAdapter);
-
     }
 
 

@@ -1,12 +1,53 @@
 package aleisamo.github.com.childadventure;
 
-public class FamilyMember {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class FamilyMember implements Parcelable{
 
     private String memberName1;
     private String memberName2;
     private String phoneNumber1;
     private String phoneNumber2;
     private String email1;
+
+    protected FamilyMember(Parcel in) {
+        memberName1 = in.readString();
+        memberName2 = in.readString();
+        phoneNumber1 = in.readString();
+        phoneNumber2 = in.readString();
+        email1 = in.readString();
+        email2 = in.readString();
+        address1 = in.readString();
+        address2 = in.readString();
+    }
+
+    public static final Creator<FamilyMember> CREATOR = new Creator<FamilyMember>() {
+        @Override
+        public FamilyMember createFromParcel(Parcel in) {
+            return new FamilyMember(in);
+        }
+
+        @Override
+        public FamilyMember[] newArray(int size) {
+            return new FamilyMember[size];
+        }
+    };
+
+    @Override
+    public String toString() {
+        return "FamilyMember{" +
+                "memberName1='" + memberName1 + '\'' +
+                ", memberName2='" + memberName2 + '\'' +
+                ", phoneNumber1='" + phoneNumber1 + '\'' +
+                ", phoneNumber2='" + phoneNumber2 + '\'' +
+                ", email1='" + email1 + '\'' +
+                ", email2='" + email2 + '\'' +
+                ", address1='" + address1 + '\'' +
+                ", address2='" + address2 + '\'' +
+                '}';
+    }
+
     private String email2;
     private String address1;
     private String address2;
@@ -88,5 +129,22 @@ public class FamilyMember {
 
     public void setAddress2(String address2) {
         this.address2 = address2;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(memberName1);
+        dest.writeString(memberName2);
+        dest.writeString(phoneNumber1);
+        dest.writeString(phoneNumber2);
+        dest.writeString(email1);
+        dest.writeString(email2);
+        dest.writeString(address1);
+        dest.writeString(address2);
     }
 }

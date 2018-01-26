@@ -22,7 +22,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -111,14 +110,14 @@ class PictureAttributes {
     }
 
 
-    static String savePictureDeviceStorage(Context context, Bitmap image) {
+    static String savePictureDeviceStorage(Context context, Bitmap image, String pictureName) {
 
         String savedImagePath = null;
 
         // Create the new file in the external storage
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + ".jpg";
+       // String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+         //       Locale.getDefault()).format(new Date());
+        String imageFileName = pictureName+ ".jpg";
         File storageDir = new File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                         + "/ChildAdventure");
@@ -130,37 +129,14 @@ class PictureAttributes {
         if (success) {
             File imageFile = new File(storageDir, imageFileName);
             savedImagePath = imageFile.getAbsolutePath();
-            try {
-                OutputStream fOut = new FileOutputStream(imageFile);
-                image.compress(Bitmap.CompressFormat.JPEG,  50, fOut);
-                fOut.close();
+            try (OutputStream fOut = new FileOutputStream(imageFile)) {
+                image.compress(Bitmap.CompressFormat.JPEG, 50, fOut);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            // Add the image to the system gallery
-          //  galleryAddPic(context, savedImagePath);
-
-            // Show a Toast with the save location
-            String savedMessage = context.getString(R.string.saved_message, savedImagePath);
-            Toast.makeText(context, savedMessage, Toast.LENGTH_SHORT).show();
         }
 
         return savedImagePath;
     }
 
-
-    static void sharePicturewithChildrens() {
-
-    }
-
-    static void sharePicture(Context context, String imagePath) {
-        // Create the share intent and start the share activity
-        File imageFile = new File(imagePath);
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("image/*");
-        Uri photoURI = FileProvider.getUriForFile(context, FILE_PROVIDER_AUTHORITY, imageFile);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, photoURI);
-        context.startActivity(shareIntent);
-    }
 }

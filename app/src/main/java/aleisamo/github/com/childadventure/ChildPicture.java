@@ -5,14 +5,16 @@ public class ChildPicture {
     private String name;
     private String storageFileName;
     private String childPictureDescription;
+    private String urlPicture;
 
     public ChildPicture() {
     }
 
-    public ChildPicture(String key, String childPictureDescription, String storageFileName) {
+    public ChildPicture(String key, String childPictureDescription, String storageFileName, String urlPicture) {
         this.name = key;
         this.storageFileName = storageFileName;
         this.childPictureDescription = childPictureDescription;
+        this.urlPicture = urlPicture;
     }
 
 
@@ -38,5 +40,13 @@ public class ChildPicture {
 
     public void setStorageFileName(String storageFileName) {
         this.storageFileName = storageFileName;
+    }
+
+    public String getUrlPicture() {
+        return urlPicture;
+    }
+
+    public void setUrlPicture(String  urlPicture) {
+        this.urlPicture = urlPicture;
     }
 }

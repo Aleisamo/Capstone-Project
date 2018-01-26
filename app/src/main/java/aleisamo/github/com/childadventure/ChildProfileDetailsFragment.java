@@ -1,5 +1,7 @@
 package aleisamo.github.com.childadventure;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -8,12 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +28,8 @@ public class ChildProfileDetailsFragment extends Fragment {
 
     @BindView(R.id.edit_profile)
     FloatingActionButton mEditProfile;
+    @BindView(R.id.allow_user)
+    FloatingActionButton mAllowUser;
     @BindView(R.id.profile_picture)
     ImageView mProfilePicture;
     @BindView(R.id.childName)
@@ -58,8 +65,12 @@ public class ChildProfileDetailsFragment extends Fragment {
 
     private DatabaseReference mDataRef;
     private DatabaseReference mDataRefName;
+    private DatabaseReference mDataRefUser;
 
     private FirebaseDatabase mFirebase;
+    private String keyChild;
+    private String userName;
+    private String email;
 
 
     public ChildProfileDetailsFragment() {
@@ -71,15 +82,26 @@ public class ChildProfileDetailsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_child_profile_details, container, false);
         ButterKnife.bind(this, rootView);
         mFirebase = FirebaseDatabase.getInstance();
-        Integer pathLength = mFirebase.getReference().child("child").toString().length();
-
-        if (getArguments() != null) {
+        //Integer pathLength = mFirebase.getReference().child("child").toString().length();
+        // using pathDetails
+       /* if (getArguments() != null) {
             String pathDetails = getArguments().getString("pathDetails").substring(pathLength + 1);
             mDataRef = mFirebase.getReference().child("child").child(pathDetails).child("childDetails");
             mDataRefName = mFirebase.getReference().child("child").child(pathDetails);
             mUpdatedDetails(mDataRef);
 
+        }*/
+
+        // using ArrayList
+        if (getArguments() != null) {
+            ArrayList<ChildDetails> details = getArguments().
+                    getParcelableArrayList("arrayDetails");
+            keyChild = getArguments().getString(getString(R.string.key));
+            mDataRef = mFirebase.getReference().child("child").child(keyChild).child("childDetails");
+            mDataRefName = mFirebase.getReference().child("child").child(keyChild);
+            mUpdatedDetails(mDataRef);
         }
+
         return rootView;
     }
 
@@ -143,8 +165,59 @@ public class ChildProfileDetailsFragment extends Fragment {
 
         ChildDetails childDetails = new ChildDetails(childName, age, "", dob, familyMember, address, allergies, languages, relevantInfo);
         mDataRef.setValue(childDetails);
-        Child child = new Child(childName, age, "", childDetails);
+        Child child = new Child(childName, keyChild, age, "", childDetails);
         mDataRefName.setValue(child);
+        Toast.makeText(getContext(), getString(R.string.profile_updated), Toast.LENGTH_SHORT).show();
     }
 
+    @OnClick(R.id.allow_user)
+    public void assignUser() {
+        final ArrayList<String> keyList = new ArrayList<>();
+        keyList.add(keyChild);
+        createDialog(keyList);
+    }
+
+    //  TODO alert dialog move to a class later
+
+    private void createDialog(final ArrayList<String> keyList) {
+        AlertDialog.Builder addUser = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View dialogAssignUser = inflater.inflate(R.layout.dialog_assign_user, null);
+        final EditText mWriteUserName = (EditText) dialogAssignUser
+                .findViewById(R.id.write_userName);
+        final EditText mWriteUserEmail = (EditText) dialogAssignUser
+                .findViewById(R.id.write_user_email);
+        addUser.setView(dialogAssignUser);
+        addUser.setTitle(getString(R.string.dialog_user_title));
+        addUser.setMessage(getString(R.string.dialog_user_message));
+        addUser.setPositiveButton("Assign", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // create user assignment
+                userName = mWriteUserName.getText().toString();
+                email = mWriteUserEmail.getText().toString();
+                createUser(keyList, userName, email);
+            }
+
+        });
+
+        addUser.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getContext(), "Action has been cancelled",
+                        Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AlertDialog add = addUser.create();
+        add.show();
+    }
+
+    private void createUser(ArrayList<String> key, String userName, String userEmail) {
+        mDataRefUser = mFirebase.getReference().child(getString(R.string.childminder_user));
+        String id = mDataRefUser.push().getKey();
+        Integer role = Integer.valueOf(getString(R.string.user_role));
+        User user = new User(userName, userEmail, key, role);
+        mDataRefUser.child(id).setValue(user);
+    }
 }

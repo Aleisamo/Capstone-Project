@@ -17,6 +17,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +33,8 @@ public class PictureDetails extends AppCompatActivity {
     private DatabaseReference mDatabaseReference;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mStorageRef;
-
+    private URL pictureUrl;
+    private String storageFileName;
 
 
     @Override
@@ -49,14 +52,21 @@ public class PictureDetails extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ChildPicture childPicture = dataSnapshot.getValue(ChildPicture.class);
+                storageFileName = childPicture.getStorageFileName();
                 mStorageRef = mFirebaseStorage.getReference().child("image" +
                         getString(R.string.childminderFolder)).
-                        child(childPicture.getStorageFileName());
+                        child(storageFileName);
                 Glide.with(getApplicationContext())
                         .using(new FirebaseImageLoader())
                         .load(mStorageRef)
                         .into(mImageView);
                 mTextView.setText(childPicture.getChildPictureDescription());
+                BuildUrl build = new BuildUrl(getApplicationContext(), childPicture.getUrlPicture());
+                try {
+                    pictureUrl = build.buildUrl();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -65,10 +75,11 @@ public class PictureDetails extends AppCompatActivity {
         });
     }
 
-    @OnClick(R.id.picture_zoom)
-    public void download(){
-
-
+    @OnClick(R.id.download)
+    public void download() {
+        new DownloadChildPicture(pictureUrl, storageFileName, getApplicationContext()).execute();
 
     }
+
+
 }

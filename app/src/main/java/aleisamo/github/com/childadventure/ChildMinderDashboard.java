@@ -56,6 +56,7 @@ public class ChildMinderDashboard extends AppCompatActivity {
                 startActivity(intentWeekInfo);
                 break;
             case R.id.profiles:
+                // TODO send id to assign user to the correct childminder
                 Intent intentChildProfile = new Intent(this, ChildProfile.class);
                 startActivity(intentChildProfile);
                 break;

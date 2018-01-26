@@ -51,5 +51,14 @@
     <string name="picture_details">Picture details</string>
     <string name="storageRef">storageRef</string>
     <string name="folderName">childminder_uploaded</string>
+    <string name="childList">childlist</string>
+    <string name="childDetails">child_details</string>
+    <string name="key">key_child</string>
+    <string name="profile_updated">Profile updated</string>
+    <string name="user_name">User name</string>
+    <string name="dialog_user_title">Assign parent</string>
+    <string name="dialog_user_message">Write Parent\'s name and email</string>
+    <string name="childminder_user">ChildminderUser</string>
+    <string name="user_role">1</string>
 
 </resources>
