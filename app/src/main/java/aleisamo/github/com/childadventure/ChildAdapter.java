@@ -10,6 +10,9 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import aleisamo.github.com.childadventure.Data.OnClickListener;
+import aleisamo.github.com.childadventure.Model.Child;
+
 public class ChildAdapter extends RecyclerView.Adapter<ChildListViewHolder> {
 
     private final List<Child> childList;
@@ -35,7 +38,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildListViewHolder> {
         String childAge = childList.get(position).getAge();
         String imageUrl = childList.get(position).getPictureUrl();
         if (imageUrl.isEmpty()) {
-            holder.mChildPhoto.setImageResource(R.mipmap.ic_profile);
+            holder.mChildPhoto.setImageResource(R.drawable.ic_face);
         } else {
             Glide.with(context).load(imageUrl).into(holder.mChildPhoto);
         }

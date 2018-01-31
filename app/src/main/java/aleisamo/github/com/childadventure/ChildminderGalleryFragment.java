@@ -19,12 +19,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import aleisamo.github.com.childadventure.Model.ChildPicture;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ChildminderGalleryFragment extends Fragment {
 
-    private GridLayoutManager childminderGridLayout;
     private FirebaseRecyclerAdapter<ChildPicture, GalleryViewHolder> mGalleryAdapter;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDataRef;
@@ -45,9 +45,9 @@ public class ChildminderGalleryFragment extends Fragment {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseStorage = FirebaseStorage.getInstance();
         mStorageRef = mFirebaseStorage.getReference();
-        mDataRef = mFirebaseDatabase.getReference().child("childminder_uploaded");
+        mDataRef = mFirebaseDatabase.getReference().child("pictures_uploaded").child("childminderPictures");
         int numberColumns = 3;
-        childminderGridLayout = new GridLayoutManager(getContext(),numberColumns);
+        GridLayoutManager childminderGridLayout = new GridLayoutManager(getContext(), numberColumns);
         displayImage(childminderGridLayout);
         return rootView;
     }

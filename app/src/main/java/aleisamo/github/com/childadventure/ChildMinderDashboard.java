@@ -13,7 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.File;
@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ChildMinderDashboard extends AppCompatActivity {
 
@@ -29,13 +30,15 @@ public class ChildMinderDashboard extends AppCompatActivity {
     private static final int REQUEST_STORAGE_PERMISSION = 1;
     private static final String PREFERENCE = "reference";
     @BindView(R.id.take_photo)
-    Button takePhoto;
+    ImageButton takePhoto;
     @BindView(R.id.week_info)
-    Button weekInfo;
+    ImageButton weekInfo;
     @BindView(R.id.profiles)
-    Button profiles;
+    ImageButton profiles;
     @BindView(R.id.gallery)
-    Button gallery;
+    ImageButton gallery;
+    @BindView(R.id.sign_out)
+    ImageButton signOut;
     private String mTempPath;
     private SharedPreferences.Editor sharePreferTempPath;
 
@@ -45,7 +48,6 @@ public class ChildMinderDashboard extends AppCompatActivity {
         setContentView(R.layout.activity_child_minder_dashborad);
         ButterKnife.bind(this);
     }
-
     public void sendTo(View view) {
         switch (view.getId()) {
             case R.id.take_photo:
@@ -163,6 +165,14 @@ public class ChildMinderDashboard extends AppCompatActivity {
         SharedPreferences sendUriString = getSharedPreferences(PREFERENCE, MODE_PRIVATE);
         intent.putExtra(String.valueOf(R.string.path), sendUriString.getString("getUriPath", null));
         startActivity(intent);
+    }
+
+    @OnClick(R.id.sign_out)
+    public void openJournal(){
+        Intent journalIntent = new Intent(this, ChildJournal.class);
+        startActivity(journalIntent);
+
+
     }
 
 }

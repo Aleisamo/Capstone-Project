@@ -1,9 +1,9 @@
-package aleisamo.github.com.childadventure;
+package aleisamo.github.com.childadventure.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-class ChildDetails  implements Parcelable{
+public class ChildDetails  implements Parcelable{
 
     private String name;
     private String age;

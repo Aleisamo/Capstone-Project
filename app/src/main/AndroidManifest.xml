@@ -8,19 +8,20 @@
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera"
-        android:required="false"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launch_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_launch_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <provider
@@ -30,7 +31,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
         <activity android:name=".ChildMinderDashboard">
@@ -40,20 +41,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".TakePicture"
+        <activity
+            android:name=".TakePicture"
             android:label="@string/take_photo"
             android:parentActivityName=".ChildMinderDashboard">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ChildMinderDashboard" />
         </activity>
-        <activity android:name=".PhotoGallery"
+        <activity
+            android:name=".PhotoGallery"
             android:label="Photo Gallery"
+            android:launchMode="standard"
             android:parentActivityName=".ChildMinderDashboard">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ChildMinderDashboard"/>
+                android:value=".ChildMinderDashboard" />
         </activity>
         <activity
             android:name=".WeekInfo"
@@ -72,29 +75,52 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".WeekInfo" />
         </activity>
-        <activity android:name=".ChildProfile"
+        <activity
+            android:name=".ChildProfile"
             android:label="@string/profiles"
             android:launchMode="standard"
             android:parentActivityName=".ChildMinderDashboard">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ChildMinderDashboard"/>
+                android:value=".ChildMinderDashboard" />
         </activity>
-        <activity android:name=".ChildProfileDetails"
+        <activity
+            android:name=".ChildProfileDetails"
             android:label="@string/child_details"
             android:parentActivityName=".ChildProfile">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ChildProfile"/>
+                android:value=".ChildProfile" />
         </activity>
-        <activity android:name=".ShareListActvity"
-            android:label="@string/child_list"
-            />
+        <activity
+            android:name=".ShareListActvity"
+            android:label="@string/child_list" />
+        <activity
+            android:name=".PictureDetails"
+            android:label="@string/picture_details"
+            android:parentActivityName=".PhotoGallery">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PhotoGallery" />
+        </activity>
 
-    <activity android:name=".PictureDetails"
-        android:label="@string/picture_details"
-        />
-</application>
+        <activity
+            android:name=".ChildJournal"
+            android:label="journal"
+            android:parentActivityName=".ChildMinderDashboard">
+        </activity>
+
+
+        <receiver android:name=".Widget.ChildAdventureWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/child_adventure_widget_info" />
+        </receiver>
+        <service android:name=".Widget.WidgetService"/>
+    </application>
 
 </manifest>

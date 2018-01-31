@@ -20,6 +20,9 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import aleisamo.github.com.childadventure.Data.BuildUrl;
+import aleisamo.github.com.childadventure.Data.DownloadChildPicture;
+import aleisamo.github.com.childadventure.Model.ChildPicture;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -47,7 +50,8 @@ public class PictureDetails extends AppCompatActivity {
         String name = file.getName();
         mFirebaseStorage = FirebaseStorage.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference().child(getString(R.string.folderName)).child(name);
+        mDatabaseReference = mFirebaseDatabase.getReference().child("pictures_uploaded")
+                .child("childminderPictures").child(name);
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

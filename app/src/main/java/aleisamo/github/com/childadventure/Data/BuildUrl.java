@@ -1,4 +1,4 @@
-package aleisamo.github.com.childadventure;
+package aleisamo.github.com.childadventure.Data;
 
 import android.content.Context;
 import android.net.Uri;

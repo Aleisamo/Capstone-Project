@@ -20,6 +20,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import aleisamo.github.com.childadventure.Model.Child;
+import aleisamo.github.com.childadventure.Model.ChildDetails;
+import aleisamo.github.com.childadventure.Model.FamilyMember;
+import aleisamo.github.com.childadventure.Model.User;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -114,7 +118,7 @@ public class ChildProfileDetailsFragment extends Fragment {
                     ChildDetails childDetails = dataSnapshot.getValue(ChildDetails.class);
                     //Log.v("ChildDetails",childDetails.getName());
                     mChildName.setText(childDetails.getName());
-                    mProfilePicture.setImageResource(R.mipmap.ic_profile);
+                    mProfilePicture.setImageResource(R.drawable.ic_face);
                     mChildAge.setText(childDetails.getAge());
                     mDOB.setText(childDetails.getDob());
                     mChildAddress.setText(childDetails.getAddress());

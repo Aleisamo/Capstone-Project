@@ -13,6 +13,7 @@
         app:cardElevation="5dp">
 
         <RelativeLayout
+            android:id="@+id/layout_remote_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp">

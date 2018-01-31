@@ -1,4 +1,4 @@
-package aleisamo.github.com.childadventure;
+package aleisamo.github.com.childadventure.Model;
 
 public class Menu {
 

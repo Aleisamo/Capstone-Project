@@ -23,6 +23,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import aleisamo.github.com.childadventure.Data.FirebaseStorageImplementation;
+import aleisamo.github.com.childadventure.Model.Child;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

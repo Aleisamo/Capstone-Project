@@ -12,7 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +23,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import aleisamo.github.com.childadventure.Data.OnClickListener;
+import aleisamo.github.com.childadventure.Model.Child;
+import aleisamo.github.com.childadventure.Model.ChildDetails;
+import aleisamo.github.com.childadventure.Model.FamilyMember;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -44,11 +51,12 @@ public class ChildProfile extends AppCompatActivity implements OnClickListener {
     // two pane mode
     boolean mTwoPane;
     private String id;
-
+    private String[] result;
+    private AlertDialog addChild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super   .onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_profile);
         mTwoPane = findViewById(R.id.fragment) != null;
         ButterKnife.bind(this);
@@ -65,34 +73,45 @@ public class ChildProfile extends AppCompatActivity implements OnClickListener {
             }
             createFragmentWithArray();
         }
-
-        //if (savedInstanceState == null) {
-           /* if (mTwoPane){
-                ChildProfileDetailsFragment childProfileDetailsFragment = new ChildProfileDetailsFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.fragment,childProfileDetailsFragment)
-                        .commit();
-            }*/
-
-        //  createFragmentActivities();
-        // }
         menuBar();
     }
 
     @OnClick(R.id.add_profile)
     public void openDialog() {
-        addChildToList();
+        createOrUpdatedChildToList(null);
+
     }
 
     // create a dialog to enter child's name and age
-    public void addChildToList() {
+    public void createOrUpdatedChildToList(final String key) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogAddChild = inflater.inflate(R.layout.dialog_add_child, null);
-        final EditText mWriteChildName = (EditText) dialogAddChild.findViewById(R.id.write_child_name);
-        final EditText mWriteChildAge = (EditText) dialogAddChild.findViewById(R.id.write_child_age);
-
         dialogBuilder.setView(dialogAddChild);
+        final EditText mWriteChildName = (EditText) dialogAddChild.findViewById(R.id.write_child_name);
+        //final EditText mWriteChildAge = (EditText) dialogAddChild.findViewById(R.id.write_child_age);
+
+        final TextView mWriteChildAge = (TextView) dialogAddChild.findViewById(R.id.write_child_age);
+        final ImageButton mDatePicker = (ImageButton) dialogAddChild.findViewById(R.id.pick_date);
+        final DatePicker mPicker = (DatePicker) dialogAddChild.findViewById(R.id.picker);
+        mWriteChildAge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDatePicker.setVisibility(View.VISIBLE);
+                mPicker.setVisibility(View.VISIBLE);
+
+            }
+        });
+        mDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String date = mPicker.getDayOfMonth() + "." + mPicker.getMonth() + 1 + "."
+                        + mPicker.getYear();
+                mWriteChildAge.setText(date);
+                mPicker.setVisibility(View.GONE);
+                mDatePicker.setVisibility(View.GONE);
+            }
+        });
 
         dialogBuilder.setTitle("Add child to List");
         dialogBuilder.setMessage("Write Child's name and age  below");
@@ -102,7 +121,22 @@ public class ChildProfile extends AppCompatActivity implements OnClickListener {
                 //send data to
                 childName = mWriteChildName.getText().toString();
                 childAge = mWriteChildAge.getText().toString();
-                writeChildProfile(childName, childAge);
+                if (key != null) {
+                    final DatabaseReference getChildRef = mReferenceChild.child(key);
+
+
+                    if (!childName.isEmpty()) {
+                        getChildRef.child("childDetails").child("name").setValue(childName);
+                        getChildRef.child("name").setValue(childName);
+                    }
+                    if (!childAge.isEmpty()) {
+                        getChildRef.child("childDetails").child("age").setValue(childAge);
+                        getChildRef.child("age").setValue(childAge);
+                    }
+                    Toast.makeText(getApplication(), "updated", Toast.LENGTH_SHORT).show();
+                } else {
+                    writeChildProfile(childName, childAge);
+                }
 
             }
         });
@@ -112,7 +146,7 @@ public class ChildProfile extends AppCompatActivity implements OnClickListener {
 
             }
         });
-        AlertDialog addChild = dialogBuilder.create();
+        addChild = dialogBuilder.create();
         addChild.show();
     }
 
@@ -143,32 +177,6 @@ public class ChildProfile extends AppCompatActivity implements OnClickListener {
         mReferenceChild.child(id).setValue(child);
     }
 
-    // populate ArrayList
-
- /*   public void populateChildList() {
-
-        mReferenceChild.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mChildList.clear();
-                if (dataSnapshot.hasChildren()) {
-                    for (DataSnapshot data : dataSnapshot.getChildren()) {
-                        mChildList.add(data.getValue(Child.class));
-                    }
-                    //createFragmentWithArray(mChildList);
-                    Log.v("listofchildren", mChildList.get(0).getAge());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.v("list of children error", "list is not populated");
-            }
-
-        });
-
-    }*/
-
     private void createFragmentWithArray() {
         Bundle args = new Bundle();
         args.putString(getString(R.string.key), id);
@@ -185,10 +193,12 @@ public class ChildProfile extends AppCompatActivity implements OnClickListener {
     @Override
     public void onClick(View view, int position, List<?> list) {
 
+        String keyChild = ((Child) list.get(position)).getKey();
+
         if (mTwoPane) {
 
-            Child child = (Child) list.get(position);
-            String keyChild = child.getKey();
+            //Child child = (Child) list.get(position);
+            //String keyChild = child.getKey();
             Bundle arg = new Bundle();
             arg.putString(getString(R.string.key), keyChild);
             ChildProfileDetailsFragment childProfileDetailsFragment = new ChildProfileDetailsFragment();
@@ -197,26 +207,25 @@ public class ChildProfile extends AppCompatActivity implements OnClickListener {
                     .replace(R.id.fragment, childProfileDetailsFragment)
                     .commit();
         } else {
-
-            Child child = (Child) list.get(position);
-            String childKey = child.getKey();
+            //Child child = (Child) list.get(position);
+            //String childKey = child.getKey();
             Intent childDetailsIntent = new Intent(this, ChildProfileDetails.class);
-            //childDetailsIntent.putParcelableArrayListExtra(getString(R.string.childDetails), child.getChildDetails());
-            childDetailsIntent.putExtra(getString(R.string.key), childKey);
+            childDetailsIntent.putExtra(getString(R.string.key), keyChild);
             startActivity(childDetailsIntent);
         }
     }
 
     @Override
-    public int onLongClick(View view, final int position, List<?> list) {
+    public String[] onLongClick(View view, final int position, List<?> list) {
         selectedPosition = position;
+        Child child = (Child) list.get(position);
+        result = new String[]{Integer.toString(selectedPosition), child.getKey()};
         if (mActionMode == null) {
             mActionMode = startSupportActionMode(mActionModeCallback);
-            //((AppCompatActivity) view.getContext()).startSupportActionMode(mActionModeCallback);
-
         }
-        return selectedPosition;
+        return result;
     }
+
 
     public void menuBar() {
         mActionModeCallback = new ActionMode.Callback() {
@@ -235,13 +244,11 @@ public class ChildProfile extends AppCompatActivity implements OnClickListener {
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.remove:
-                        Toast.makeText(getApplication(), "remove" + selectedPosition, Toast.LENGTH_SHORT).show();
-                        //removeChild(selectedPosition);
+                        removeChild(result[1]);
                         mode.finish();
                         break;
                     case R.id.updated:
-                        Toast.makeText(getApplication(), "updated", Toast.LENGTH_SHORT).show();
-                        //updatedChild();
+                        createOrUpdatedChildToList(result[1]);
                         break;
                 }
                 return false;
@@ -253,22 +260,21 @@ public class ChildProfile extends AppCompatActivity implements OnClickListener {
             }
         };
 
+    }
+
+    private void removeChild(String key) {
+        mReferenceChild.child(key).removeValue();
+        Toast.makeText(getApplication(), "remove" , Toast.LENGTH_SHORT).show();
 
     }
 
-    private boolean isTwoPane() {
-        return getResources().getBoolean(R.bool.isTwoPane);
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        addChild.dismiss();
+
     }
-
-
-    private void updatedChild() {
-    }
-
-    private void removeChild(int position) {
-    }
-
-    // create widget_list_ingredients card fragment
-
 }
 
 

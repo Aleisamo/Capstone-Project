@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -19,8 +18,6 @@ public class ChildShareViewHolder extends RecyclerView.ViewHolder {
     LinearLayout mLinearLayout;
     @BindView(R.id.photo_profile)
     ImageView mChildPhoto;
-    @BindView(R.id.selected_child)
-    RadioButton mSelectedChild;
 
     public ChildShareViewHolder(View itemView) {
         super(itemView);

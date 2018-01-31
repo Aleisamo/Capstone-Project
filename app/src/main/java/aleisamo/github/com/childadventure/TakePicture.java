@@ -89,7 +89,7 @@ public class TakePicture extends AppCompatActivity {
         mStorageRef = mFirebaseStorage.getReference();
         // database reference
         mFireBaseDataBase = FirebaseDatabase.getInstance();
-        mDatabaseRef = mFireBaseDataBase.getReference().child("childminder_uploaded");
+        mDatabaseRef = mFireBaseDataBase.getReference().child("pictures_uploaded");
 
     }
 

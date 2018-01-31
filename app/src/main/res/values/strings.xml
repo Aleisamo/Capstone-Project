@@ -60,5 +60,9 @@
     <string name="dialog_user_message">Write Parent\'s name and email</string>
     <string name="childminder_user">ChildminderUser</string>
     <string name="user_role">1</string>
+    <string name="add_widget">Add widget</string>
+    <string name="create_child_list_now">Create child list now</string>
+    <string name="title_description">Description</string>
+    <string name="pictures_folder">pictures_uploaded</string>
 
 </resources>

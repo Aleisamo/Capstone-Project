@@ -16,11 +16,6 @@ public class FirebaseImplementation {
     }
 
 
-    public void dayReadFunction() {
-        mFirebaseChildAdventure = FirebaseDatabase.getInstance();
-        mDataReferenceMenu = mFirebaseChildAdventure.getReference().child("menu");
-
-    }
 
 
 }

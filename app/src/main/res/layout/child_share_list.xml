@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linearShareChild"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -19,18 +18,13 @@
             android:background="@drawable/avatar"
             android:src="@mipmap/ic_profile" />
 
-        <RadioButton
-            android:id="@+id/selected_child"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|top" />
     </RelativeLayout>
-        <TextView
-            android:id="@+id/childName"
-            android:layout_gravity="bottom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Child age" />
+
+    <TextView
+        android:id="@+id/childName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:hint="Child age" />
 
 </LinearLayout>

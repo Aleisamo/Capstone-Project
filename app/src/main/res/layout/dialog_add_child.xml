@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="20dp"
@@ -10,11 +9,28 @@
         android:id="@+id/write_child_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/child_name"/>
-    <EditText
-        android:id="@+id/write_child_age"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/child_age"/>
+        android:hint="@string/child_name" />
+
+        <TextView
+            android:id="@+id/write_child_age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/child_age" />
+
+        <ImageButton
+            android:id="@+id/pick_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:visibility="gone"
+            android:background="@android:color/white"
+            android:src="@drawable/ic_clear" />
+
+        <DatePicker
+            android:id="@+id/picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
 
 </LinearLayout>

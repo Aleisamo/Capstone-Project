@@ -19,7 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import aleisamo.github.com.childadventure.ChildMinderDashboard;
-import aleisamo.github.com.childadventure.ChildPicture;
+import aleisamo.github.com.childadventure.Model.ChildPicture;
 import aleisamo.github.com.childadventure.ShareListActvity;
 
 public class FirebaseStorageImplementation {
@@ -66,8 +66,9 @@ public class FirebaseStorageImplementation {
                                 urlPicture
                         );
 
-                        String pictureUploadKey = mDatabaseRef.push().getKey();
-                        mDatabaseRef.child(pictureUploadKey).setValue(childPicture);
+                        DatabaseReference databaseReference = mDatabaseRef.child(profileName);
+                        String pictureUploadKey = databaseReference.push().getKey();
+                        databaseReference.child(pictureUploadKey).setValue(childPicture);
                         Toast.makeText(context, "Picture uploaded to" + folderName,
                                 Toast.LENGTH_SHORT).show();
                         if (activityName.equals("ShareListActivity")){

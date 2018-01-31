@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import aleisamo.github.com.childadventure.Data.OnClickListener;
+import aleisamo.github.com.childadventure.Model.Child;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

@@ -1,4 +1,4 @@
-package aleisamo.github.com.childadventure;
+package aleisamo.github.com.childadventure.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -86,6 +86,13 @@ public class Child implements Parcelable {
         this.pictureUrl = pictureUrl;
     }
 
+    @Override
+    public String toString() {
+        return "Child{" +
+                "name='" + name + '\'' +
+                ", age='" + age + '\'' +
+                '}';
+    }
 
     @Override
     public int describeContents() {

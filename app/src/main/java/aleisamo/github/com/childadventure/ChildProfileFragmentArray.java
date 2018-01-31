@@ -19,13 +19,15 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import aleisamo.github.com.childadventure.Data.OnClickListener;
+import aleisamo.github.com.childadventure.Model.Child;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ChildProfileFragmentArray extends Fragment  {
+public class ChildProfileFragmentArray extends Fragment {
     @BindView(R.id.list_children)
     RecyclerView mListChildren;
-    private LinearLayoutManager mChildListlm;
+    private LinearLayoutManager mChildLlm;
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mReferenceChild;
     private OnClickListener callback;
@@ -36,7 +38,7 @@ public class ChildProfileFragmentArray extends Fragment  {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        callback =(OnClickListener)context;
+        callback = (OnClickListener) context;
 
     }
 
@@ -47,19 +49,9 @@ public class ChildProfileFragmentArray extends Fragment  {
         ButterKnife.bind(this, rootView);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mReferenceChild = mFirebaseDatabase.getReference().child("child");
-        mChildListlm = new LinearLayoutManager(getContext());
-        mListChildren.setLayoutManager(mChildListlm);
+        mChildLlm = new LinearLayoutManager(getContext());
+        mListChildren.setLayoutManager(mChildLlm);
         createListChildren(callback, mListChildren);
-      /*  if (getArguments() != null) {
-            mChildListlm = new LinearLayoutManager(getContext());
-            mListChildren.setLayoutManager(mChildListlm);
-            ArrayList<Child> childList = getArguments().getParcelableArrayList(getString(R.string.childList));
-        }*/
-
-
-        //ChildAdapter childAdapter = new ChildAdapter(childList, getContext(), this);
-        //mListChildren.setAdapter(childAdapter);
-
         return rootView;
 
     }
@@ -71,17 +63,14 @@ public class ChildProfileFragmentArray extends Fragment  {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listChild.clear();
                 if (dataSnapshot.hasChildren()) {
-                    for  (DataSnapshot data : dataSnapshot.getChildren()) {
-                            listChild.add(data.getValue(Child.class));
-
-
+                    for (DataSnapshot data : dataSnapshot.getChildren()) {
+                        listChild.add(data.getValue(Child.class));
                     }
                     ChildAdapter childAdapter = new ChildAdapter(listChild,
                             getContext(), clickListener);
                     recyclerView.setAdapter(childAdapter);
                     childAdapter.notifyDataSetChanged();
                 }
-
             }
 
             @Override
@@ -97,21 +86,4 @@ public class ChildProfileFragmentArray extends Fragment  {
         super.onActivityCreated(savedInstanceState);
     }
 
-   /* @Override
-    public void onClick(View view, int position, List<?> list) {
-        Child child = (Child) list.get(position);
-        String childKey = child.getKey();
-        Intent childDetailsIntent = new Intent(getActivity(), ChildProfileDetails.class);
-        //childDetailsIntent.putParcelableArrayListExtra(getString(R.string.childDetails), child.getChildDetails());
-        childDetailsIntent.putExtra(getString(R.string.key), childKey);
-        getContext().startActivity(childDetailsIntent);
-
-    }
-
-    @Override
-    public void onLongClick(View view, int position, List<?> list) {
-
-        Toast.makeText(getContext(), "this is long click", Toast.LENGTH_SHORT).show();
-
-    }*/
 }

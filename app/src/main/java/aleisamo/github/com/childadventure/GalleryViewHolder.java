@@ -9,7 +9,7 @@ import butterknife.ButterKnife;
 
 public class GalleryViewHolder extends RecyclerView.ViewHolder {
     View mView;
-    @BindView(R.id.photo_id)
+    @BindView(R.id.imageView)
     ImageView mPhotoGallery;
    // @BindView(R.id.text_id)
     //TextView mComment;

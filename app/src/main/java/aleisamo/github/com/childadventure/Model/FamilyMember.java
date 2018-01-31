@@ -1,4 +1,4 @@
-package aleisamo.github.com.childadventure;
+package aleisamo.github.com.childadventure.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

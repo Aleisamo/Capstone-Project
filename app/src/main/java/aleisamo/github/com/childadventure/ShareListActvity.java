@@ -22,6 +22,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import aleisamo.github.com.childadventure.Data.FirebaseStorageImplementation;
+import aleisamo.github.com.childadventure.Model.Child;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -90,7 +91,7 @@ public class ShareListActvity extends AppCompatActivity {
                 String childPictureUrl = model.getPictureUrl();
                 final String childName = model.getName();
                 if (childPictureUrl.isEmpty()) {
-                    holder.mChildPhoto.setImageResource(R.mipmap.ic_profile);
+                    holder.mChildPhoto.setImageResource(R.drawable.ic_face);
                 } else {
                     Picasso.with(getApplicationContext()).load(childPictureUrl).into(holder.mChildPhoto);
                 }

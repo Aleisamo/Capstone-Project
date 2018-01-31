@@ -34,7 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-class PictureAttributes {
+public class PictureAttributes {
 
     private static final String FILE_PROVIDER_AUTHORITY = "com.example.android.fileprovider";
 
@@ -110,7 +110,7 @@ class PictureAttributes {
     }
 
 
-    static String savePictureDeviceStorage(Context context, Bitmap image, String pictureName) {
+    public static String savePictureDeviceStorage(Context context, Bitmap image, String pictureName) {
 
         String savedImagePath = null;
 

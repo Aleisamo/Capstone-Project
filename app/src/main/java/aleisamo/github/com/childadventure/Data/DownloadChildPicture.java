@@ -1,4 +1,4 @@
-package aleisamo.github.com.childadventure;
+package aleisamo.github.com.childadventure.Data;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
+
+import aleisamo.github.com.childadventure.PictureAttributes;
 
 public class DownloadChildPicture extends AsyncTask<Void, Void, Boolean> {
     private URL downnloadUrl;

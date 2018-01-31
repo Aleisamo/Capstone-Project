@@ -1,81 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="aleisamo.github.com.childadventure.ChildMinderDashboard">
+
     <android.support.design.widget.AppBarLayout
         android:name="@+name/childminder_dashboard"
         android:layout_width="match_parent"
         android:layout_height="66dp">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@mipmap/ic_profile"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/nounou"/>
+            android:layout_marginLeft="12dp"
+            android:src="@drawable/ic_launch_icon" />
+
     </android.support.design.widget.AppBarLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="16dp"
+        android:fontFamily="Arial"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/nounou"
+        android:textStyle="bold" />
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:paddingTop="90dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="30dp"
             android:orientation="vertical">
 
-            <Button
+            <ImageButton
                 android:id="@+id/take_photo"
                 android:name="@+name/take_photo"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/avatar"
                 android:onClick="sendTo"
-                android:text="@string/take_photo" />
+                android:src="@drawable/ic_photo_camera" />
 
-            <Button
-                android:name="@+name/week_info"
+            <ImageButton
                 android:id="@+id/week_info"
+                android:name="@+name/week_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/avatar_week"
                 android:onClick="sendTo"
+                android:src="@drawable/ic_today"
                 android:text="@string/week" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/profiles"
                 android:name="@+name/profiles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/avatar_person"
                 android:onClick="sendTo"
-                android:text="@string/profiles" />
+                android:src="@drawable/ic_face" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/gallery"
                 android:name="@+name/gallery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:background="@drawable/avatar_icon"
                 android:onClick="sendTo"
-                android:text="@string/gallery" />
+                android:src="@drawable/ic_photo_library" />
         </LinearLayout>
 
-        <Button
-            android:name="@+name/sign_out"
+        <ImageButton
             android:id="@+id/sign_out"
-            android:layout_alignParentBottom="true"
-            android:text="@string/signout"
-            android:layout_width="114dp"
-            android:layout_height="wrap_content" />
+            android:name="@+name/sign_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/avatar_week"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_alignParentBottom="true"/>
+
+
     </RelativeLayout>
 
 
