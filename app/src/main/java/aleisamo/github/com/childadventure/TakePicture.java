@@ -179,7 +179,7 @@ public class TakePicture extends AppCompatActivity {
                 this, mDatabaseRef);
 
         mFirebaseStorageImp.storeAndSavePicturePath(name, folderName, progressDialog,
-                profileName, getDescription, getLocalClassName());
+                profileName, getDescription, getLocalClassName(),"mainKey");
     }
 
     private void launchCamera() {

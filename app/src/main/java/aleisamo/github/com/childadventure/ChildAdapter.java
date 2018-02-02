@@ -19,6 +19,8 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildListViewHolder> {
     private Context context;
     private OnClickListener clickListener;
 
+    //private SparseBooleanArray selectedItems;
+
     public ChildAdapter(List<Child> childList, Context context,OnClickListener clickListener) {
         this.childList = childList;
         this.context = context;
@@ -54,5 +56,31 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildListViewHolder> {
 
     }
 
+  /*  public void longClickSelection (int pos){
+        if (selectedItems.get(pos,false)){
+            selectedItems.delete(pos);
+        }
+        else {
+            selectedItems.put(pos,true);
+        }
+        notifyItemChanged(pos);
+    }
 
+    public void clearSelection(){
+        selectedItems.clear();
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedItemCount(){
+        return selectedItems.size();
+    }
+    public List<Integer>getSelectedItems(){
+        List<Integer> items =
+                new ArrayList<>(selectedItems.size());
+        for (int i = 0; i <selectedItems.size() ; i++) {
+            items.add(selectedItems.keyAt(i));
+
+        }
+        return  items;
+    }*/
 }

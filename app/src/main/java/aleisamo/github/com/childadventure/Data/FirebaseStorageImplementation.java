@@ -42,7 +42,7 @@ public class FirebaseStorageImplementation {
     public void storeAndSavePicturePath(final String imageName, final String folderName,
                                         final ProgressDialog progressDialog,
                                         final String profileName, final String description,
-                                        final String activityName) {
+                                        final String activityName, final String key) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         mBitmap.compress(Bitmap.CompressFormat.JPEG, 40, byteArrayOutputStream);
         InputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
@@ -66,7 +66,7 @@ public class FirebaseStorageImplementation {
                                 urlPicture
                         );
 
-                        DatabaseReference databaseReference = mDatabaseRef.child(profileName);
+                        DatabaseReference databaseReference = mDatabaseRef.child(profileName+key);
                         String pictureUploadKey = databaseReference.push().getKey();
                         databaseReference.child(pictureUploadKey).setValue(childPicture);
                         Toast.makeText(context, "Picture uploaded to" + folderName,

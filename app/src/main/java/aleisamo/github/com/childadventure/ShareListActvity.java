@@ -90,6 +90,7 @@ public class ShareListActvity extends AppCompatActivity {
             protected void onBindViewHolder(final ChildShareViewHolder holder, final int position, Child model) {
                 String childPictureUrl = model.getPictureUrl();
                 final String childName = model.getName();
+                final String key = model.getKey();
                 if (childPictureUrl.isEmpty()) {
                     holder.mChildPhoto.setImageResource(R.drawable.ic_face);
                 } else {
@@ -101,7 +102,7 @@ public class ShareListActvity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         // save photo path within childPicture object
-                        savePicture(childName, getString(R.string.childFolder));
+                        savePicture(childName, getString(R.string.childFolder), key);
                     }
                 });
 
@@ -112,10 +113,10 @@ public class ShareListActvity extends AppCompatActivity {
     }
 
     // change method name assignChildPicture
-    private void savePicture(String profileName, String folderName) {
+    private void savePicture(String profileName, String folderName, String key) {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         mFirebaseStorageImp.storeAndSavePicturePath(getImageName, folderName, progressDialog,
-                profileName, getDescription,activityName);
+                profileName, getDescription,activityName, key);
     }
 
     @Override

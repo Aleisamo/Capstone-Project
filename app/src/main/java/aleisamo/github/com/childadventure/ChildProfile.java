@@ -79,7 +79,7 @@ public class ChildProfile extends AppCompatActivity implements OnClickListener {
     @OnClick(R.id.add_profile)
     public void openDialog() {
         createOrUpdatedChildToList(null);
-
+        //addChild.dismiss();
     }
 
     // create a dialog to enter child's name and age
@@ -231,6 +231,7 @@ public class ChildProfile extends AppCompatActivity implements OnClickListener {
         mActionModeCallback = new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, android.view.Menu menu) {
+
                 getMenuInflater().inflate(R.menu.select_menu, menu);
                 return true;
             }
@@ -242,6 +243,7 @@ public class ChildProfile extends AppCompatActivity implements OnClickListener {
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
                 switch (item.getItemId()) {
                     case R.id.remove:
                         removeChild(result[1]);
@@ -268,13 +270,14 @@ public class ChildProfile extends AppCompatActivity implements OnClickListener {
 
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();
-        addChild.dismiss();
 
     }
+
+
+
 }
 
 

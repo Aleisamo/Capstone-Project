@@ -16,19 +16,26 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ChildMinderDashboard extends AppCompatActivity {
-
+    private static final int RC_SIGN_IN = 123;
     private static final String FILE_PROVIDER_AUTHORITY = "aleisamo.github.com.fileprovider";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_STORAGE_PERMISSION = 1;
     private static final String PREFERENCE = "reference";
+    private static final String ANONYMOUS = "anonymous";
     @BindView(R.id.take_photo)
     ImageButton takePhoto;
     @BindView(R.id.week_info)
@@ -42,12 +49,27 @@ public class ChildMinderDashboard extends AppCompatActivity {
     private String mTempPath;
     private SharedPreferences.Editor sharePreferTempPath;
 
+    // authentication
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+
+
+    List<AuthUI.IdpConfig> providers = Arrays.asList(
+            new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+            new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build());
+    private String mUserName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_minder_dashborad);
         ButterKnife.bind(this);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        authentication();
+
     }
+
     public void sendTo(View view) {
         switch (view.getId()) {
             case R.id.take_photo:
@@ -87,7 +109,6 @@ public class ChildMinderDashboard extends AppCompatActivity {
 
 
     private void launchCamera() {
-
         // Create the capture image intent
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -145,13 +166,24 @@ public class ChildMinderDashboard extends AppCompatActivity {
                 }
                 break;
             }
+
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // If the image capture activity was called and was successful
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
+      if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Sign in", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "sign in cancelled", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+
+       // If the image capture activity was called and was successful
+        else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             // Process the image and set it to the TextView
             processAndSetImage();
         } else {
@@ -168,11 +200,49 @@ public class ChildMinderDashboard extends AppCompatActivity {
     }
 
     @OnClick(R.id.sign_out)
-    public void openJournal(){
+    public void signOut(){
+        AuthUI.getInstance().signOut(this);
+    }
+
+    /*public void openJournal() {
         Intent journalIntent = new Intent(this, ChildJournal.class);
         startActivity(journalIntent);
+    }*/
 
+    public  void authentication() {
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    mUserName = user.getDisplayName();
+                    // sign in
+                    Toast.makeText(getApplicationContext(),
+                            " Welcome to Child adventure app", Toast.LENGTH_SHORT).show();
+
+                } else {
+                   mUserName = "anonymous";
+                    startActivityForResult(AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setIsSmartLockEnabled(false)
+                            .setAvailableProviders(providers)
+                            .setLogo(R.drawable.ic_launch_icon)
+                            .build(), RC_SIGN_IN);
+                }
+            }
+        };
 
     }
 
+  /* @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+    }*/
 }
